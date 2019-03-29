@@ -32,7 +32,7 @@ public class UserServiceImpl implements IUserService {
         LOGGER.info("开始插入用户");
         userMapper.insert(user);
         LOGGER.info("插入用户完成");
-        a(user);
+        //a(user);
     }
 
     private void a(User user) {

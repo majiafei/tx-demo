@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<script type="text/javascript" src="/jquery.min.js"></script>
+
+<script>
+    function f() {
+        var user = {};
+        user['userName'] = '小明';
+        user['useAge'] = 15;
+        var users = [];
+        users.push(user);
+        users.push(user);
+        var userList = {};
+        userList['userInfo'] = users;
+/*       $.ajax({
+           // headers必须添加，否则会报415错误
+           headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+           },
+           url: '/user/save',
+           type: 'POST',
+           data: JSON.stringify(users),
+           dataType: 'json',
+           success: function (result) {
+               console.info(result);
+           }
+       });*/
+
+        $.ajax({
+            url: '/user/save',
+            type: 'POST',
+            data: JSON.stringify(userList),
+            dataType: 'json',
+            contentType:"application/json",
+            success: function (result) {
+                console.info(result);
+            }
+        });
+    }
+</script>
+<body>
+
+<button onclick="f()">ddfd</button>
+<input id="hello" value="llll">
+
+</body>
+</html>
