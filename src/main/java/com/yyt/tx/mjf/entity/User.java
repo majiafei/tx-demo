@@ -1,6 +1,7 @@
 package com.yyt.tx.mjf.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @TableName("tb_user")
 public class User {
 
-    @TableField("user_id")
+    @TableId("user_id")
     private Long userId;
 
     @TableField("user_name")

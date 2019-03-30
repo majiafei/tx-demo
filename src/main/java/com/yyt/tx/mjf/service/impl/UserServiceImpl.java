@@ -3,11 +3,9 @@ package com.yyt.tx.mjf.service.impl;
 import com.yyt.tx.mjf.entity.User;
 import com.yyt.tx.mjf.mapper.UserMapper;
 import com.yyt.tx.mjf.service.IUserService;
-import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.AccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +31,11 @@ public class UserServiceImpl implements IUserService {
         userMapper.insert(user);
         LOGGER.info("插入用户完成");
         //a(user);
+    }
+
+    @Override
+    public User getUserById(int userId) {
+        return userMapper.selectById(userId);
     }
 
     private void a(User user) {

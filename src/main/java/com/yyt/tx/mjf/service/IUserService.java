@@ -13,4 +13,6 @@ public interface IUserService {
 
     void save(User user) throws Exception;
 
+    User getUserById(int userId);
+
 }
