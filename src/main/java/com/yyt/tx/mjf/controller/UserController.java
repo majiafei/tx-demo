@@ -46,4 +46,9 @@ public class UserController {
         return "hello";
     }
 
+    @RequestMapping("/mjf")
+    public String mjf() {
+        return "mjf";
+    }
+
 }
