@@ -43,7 +43,7 @@ public class UserController {
 
     @RequestMapping("/hello")
     public String hello() {
-        return "index";
+        return "hello";
     }
 
 }
