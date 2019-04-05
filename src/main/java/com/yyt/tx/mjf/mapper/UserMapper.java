@@ -1,7 +1,11 @@
 package com.yyt.tx.mjf.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyt.tx.mjf.common.mapper.TxBaseMapper;
 import com.yyt.tx.mjf.entity.User;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @ClassName: UserMapper
@@ -10,4 +14,7 @@ import com.yyt.tx.mjf.entity.User;
  * @Description:
  */
 public interface UserMapper extends TxBaseMapper<User> {
+
+    Page<User> listUser(@Param("page") Page page);
+
 }
