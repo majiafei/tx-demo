@@ -16,3 +16,6 @@ mybatis-plus:
 logging:
   level:
     com.yyt.tx.mjf.mapper: debug
+
+log:
+  path: guns-logs
