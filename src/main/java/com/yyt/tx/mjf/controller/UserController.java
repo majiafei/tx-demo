@@ -2,6 +2,7 @@ package com.yyt.tx.mjf.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.yyt.tx.mjf.common.pojo.EasyUITree;
 import com.yyt.tx.mjf.entity.User;
 import com.yyt.tx.mjf.entity.UserList;
@@ -9,6 +10,7 @@ import com.yyt.tx.mjf.service.IUserService;
 import com.yyt.tx.mjf.service.impl.UserServiceImpl;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -82,7 +84,7 @@ public class UserController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Map listUser(@RequestParam(value = "page", defaultValue = "1") Integer page, Integer limit, User user) {
+    public Object listUser(@RequestParam(value = "callback", required = false) String callback, @RequestParam(value = "page", defaultValue = "1") Integer page, Integer limit, User user) {
         Page page1 = new Page(page, limit);
         IPage<User> list = userService.list1(page1, user);
 
@@ -91,6 +93,10 @@ public class UserController {
         map.put("data", list.getRecords());
         map.put("code", 0);
         map.put("msg", "");
+
+        if (callback != null) {
+           return new JSONPObject(callback, map);
+        }
 
         return map;
     }
