@@ -124,4 +124,9 @@ public class UserController {
         return "picture/index";
     }
 
+    @RequestMapping("/picture2")
+    public String picture2() {
+        return "picture/picture2";
+    }
+
 }

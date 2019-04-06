@@ -118,7 +118,16 @@ layui.use(['layer','form','table', 'tree'], function () {
             },{
                 text: 'Item2'
             }]*/
-         url:'/user/tree'
+         url:'/user/tree',
+         onSelect: function (node) {
+             $("#user_name").val(node.text);
+             console.info(node);
+             var isLeaf = $("tt").tree('isLeaf', node.target);
+             console.info(isLeaf);
+             //if (!isLeaf) {
+                 layer.close(layer.index);
+             //}
+         }
         });
         /******easyui tree*****************************************************/
 
