@@ -57,10 +57,11 @@ layui.use(['layer','form','table', 'tree'], function () {
             // , skin: 'line'
             ,cols: [
                 [
-                    //{type:'radio'}
-                    {type:'checkbox'}
+                    {type:'radio'},
                     ,{field:'userId', width:80, title: 'ID', sort: true}
-                    ,{field:'userName', width:80, title: '用户名'}
+                    ,{field:'userName', width:80, title: '用户名',templet: function(d){
+                        return 'ID：'+ d.userId +'，标题：<span style="color: #c00;">'+ d.userName +'</span>'
+                    }}
                     ,{field:'sex', width:80, title: '性别', sort: true}
                     ,{field:'city', width:80, title: '城市'}
                     ,{field:'sign', title: '签名', minWidth: 100}
@@ -119,10 +120,15 @@ layui.use(['layer','form','table', 'tree'], function () {
                 text: 'Item2'
             }]*/
          url:'/user/tree',
+        queryParams: {
+            siteId: 0
+        },
          onSelect: function (node) {
              $("#user_name").val(node.text);
              console.info(node);
              var isLeaf = $("tt").tree('isLeaf', node.target);
+             var getParent = $('#tt').tree('getRoot', node.target);
+             console.info(getParent)
              console.info(isLeaf);
              //if (!isLeaf) {
                  layer.close(layer.index);
@@ -179,4 +185,7 @@ layui.use(['layer','form','table', 'tree'], function () {
         ]
     });
     /*****************************************表单校验**************************************************************/
+    form.on('submit(btnSub)', function(data){
+      alert()
+    });
 });

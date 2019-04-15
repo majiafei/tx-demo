@@ -30,6 +30,8 @@
     <li><img data-original="/img/tibet-6.jpg" src="/img/thumbnails/tibet-6.jpg" alt="图片6"></li>-->
 </ul>
 
+<button onclick="change()">dsf</button>
+
 </body>
 
 <script>
@@ -41,9 +43,21 @@
     }
     $("#jq22").html(li);
     $('#jq22').viewer({
-      url: 'data-original',
+      url: 'data-original'
     });
   });
+
+  function change() {
+    var li = '';
+    var url = 'https://img13.360buyimg.com/n1/s450x450_jfs/t17425/6/1117130719/77250/b4afe949/5abb0fc0Nb0fd7afd.jpg';
+    for (var i = 0; i < 6; i++) {
+      li += '<li><img data-original="' + url + '" src="' + url + '" alt="图片1"></li>';
+    }
+    $("#jq22").html(li);
+    $('#jq22').viewer({
+      url: 'data-original'
+    });
+  }
 </script>
 
 </html>
