@@ -6,11 +6,8 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.yyt.tx.mjf.common.pojo.EasyUITree;
 import com.yyt.tx.mjf.entity.User;
 import com.yyt.tx.mjf.entity.UserList;
-import com.yyt.tx.mjf.service.IUserService;
 import com.yyt.tx.mjf.service.impl.UserServiceImpl;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -129,4 +126,13 @@ public class UserController {
         return "picture/picture2";
     }
 
+    @RequestMapping("/template")
+    public String showTempl() {
+        return "template/scriptTempl";
+    }
+
+    @RequestMapping("engine")
+    public String engine() {
+        return "engine/engine";
+    }
 }
