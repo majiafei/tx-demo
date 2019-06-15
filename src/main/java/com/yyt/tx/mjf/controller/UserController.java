@@ -100,7 +100,7 @@ public class UserController {
 
     @RequestMapping("/tree")
     @ResponseBody
-    public List<EasyUITree> getTree(@RequestParam(value = "id", defaultValue = "0") Long parentId) {
+    public List<EasyUITree> getTree(@RequestParam(value = "id", defaultValue = "0") Long parentId, Integer siteId) {
         List<User> list = userService.list(new Page(1, 10)).getRecords();
         List<EasyUITree> easyUITreeList = new ArrayList<>();
 
