@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.yyt.tx.mjf.common.pojo.EasyUITree;
 import com.yyt.tx.mjf.entity.User;
 import com.yyt.tx.mjf.entity.UserList;
+import com.yyt.tx.mjf.mapper.UserMapper;
 import com.yyt.tx.mjf.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @RequestMapping("/save")
     @ResponseBody
@@ -134,5 +138,28 @@ public class UserController {
     @RequestMapping("engine")
     public String engine() {
         return "engine/engine";
+    }
+
+    @RequestMapping("/echarts")
+    public String echarts() {
+        return "echarts/echarts";
+    }
+    @RequestMapping("groupByName")
+    @ResponseBody
+    public Map<String, List> groupByName() {
+        List<Map> maps = userMapper.groupByName();
+        Map<String, List> resultMap = new HashMap();
+
+        List<String> names = new ArrayList<>();
+        List<Long> countList = new ArrayList<>();
+        for (Map map : maps) {
+            names.add((String) map.get("user_name"));
+            countList.add((Long) map.get("num"));
+        }
+
+        resultMap.put("categories", names);
+        resultMap.put("data", countList);
+
+        return resultMap;
     }
 }

@@ -6,4 +6,8 @@
         select * from tb_user
     </select>
 
+    <select id="groupByName" resultType="java.util.Map">
+        SELECT user_name, count(user_id) num FROM tb_user GROUP BY user_name
+    </select>
+
 </mapper>

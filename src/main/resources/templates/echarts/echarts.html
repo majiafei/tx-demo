@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+</head>
+<body>
+<div id="main" style="width: 600px;height:400px;"></div>
+</body>
+
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    // 初始 option
+    option = {
+        title: {
+            text: '异步数据加载示例'
+        },
+        tooltip: {},
+        legend: {
+            data:['销量']
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {},
+        series: [{
+            name: '销量',
+            type: 'bar',
+            data: []
+        }]
+    };
+    myChart.setOption(option);
+
+    $.ajax({
+        url: "/user/groupByName",
+        success: function(result){
+            myChart.setOption({
+                xAxis: {
+                    data: result.categories
+                },
+                series: [{
+                    // 根据名字对应到相应的系列
+                    name: '销量',
+                    data: result.data
+                }]
+            });
+        }
+    });
+
+</script>
+
+</html>

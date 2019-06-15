@@ -6,6 +6,7 @@ import com.yyt.tx.mjf.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: UserMapper
@@ -16,5 +17,7 @@ import java.util.List;
 public interface UserMapper extends TxBaseMapper<User> {
 
     Page<User> listUser(@Param("page") Page page);
+
+    List<Map> groupByName();
 
 }
