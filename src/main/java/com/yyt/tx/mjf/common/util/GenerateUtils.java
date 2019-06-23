@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,9 +26,19 @@ public class GenerateUtils {
     private static  Map<String, String> primaryKeyMap = new ConcurrentHashMap<>();
     private static  Map<String, List<String>> columnMap = new ConcurrentHashMap<>();
 
-    private static final String entityLocation = "F:\\myproject\\idea\\tx-demo\\src\\main\\java\\com\\yyt\\tx\\mjf\\entity";
+    private static final String entityLocation = "F:/myproject/idea/tx-demo/src/main/java/com/yyt/tx/mjf/entity";
 
-    private static final String FILE_SUFFIX = ".java";
+    private static final String daoLocation = "F:/myproject/idea/tx-demo/src/main/java/com/yyt/tx/mjf/dao";
+
+    private static final String serviceLocation = "F:/myproject/idea/tx-demo/src/main/java/com/yyt/tx/mjf/service";
+
+    private static final String serviceRelative = "com/yyt/tx/mjf/service";
+
+    private static final String entityRalative = "com/yyt/tx/mjf/entity";
+
+    private static final String daoRealtive = "com/yyt/tx/mjf/dao";
+
+  private static final String FILE_SUFFIX = ".java";
 
     private static  Map<String, String> jdbcTypeToJavaTypeMap = new HashMap<>();
 
@@ -40,6 +49,7 @@ public class GenerateUtils {
         jdbcTypeToJavaTypeMap.put("VARCHAR", "String");
         jdbcTypeToJavaTypeMap.put("BIGINT", "Long");
         jdbcTypeToJavaTypeMap.put("DECIMAL", "Double");
+        jdbcTypeToJavaTypeMap.put("DATETIME", "Date");
     }
 
     public static void getColumnInfo() throws ClassNotFoundException, SQLException {
@@ -330,30 +340,77 @@ public class GenerateUtils {
 
         for (String tableName : tableNames) {
             StringBuilder sb = new StringBuilder();
-            sb.append("public class " + firstLetterConverUppercase(underlineToHump(tableName)) + "{");
+            String entityName = firstLetterConverUppercase(underlineToHump(tableName));
+            sb.append("package " + entityRalative.replaceAll("/", ".")
+                    + ";");
+            sb.append("\n");
+            sb.append("import java.lang.*;");
+            sb.append("\n");
+            sb.append("import java.util.*;");
+            sb.append("\n");
+            sb.append("public class " + entityName + "{");
             sb.append("\n");
             List<String> columnNames = getColumnNames(tableName);
             List<String> columnTypes = getColumnTypes(tableName);
             for (int i = 0; i < columnNames.size(); i++) {
-                sb.append(COLUMN_ANNOTATION_NAME + "(value = \"" + columnNames.get(i) + "\")");
+//                sb.append(COLUMN_ANNOTATION_NAME + "(value = \"" + columnNames.get(i) + "\")");// TODO
                 sb.append("\n");
                 sb.append("private " + jdbcTypeToJavaTypeMap.get(columnTypes.get(i).toUpperCase()) + " " + underlineToHump(columnNames.get(i)));
                 sb.append(";");
                 sb.append("\n");
             }
             sb.append("}");
-            generateFile(firstLetterConverUppercase(underlineToHump(tableName)), sb.toString());
+
+            // dao
+            StringBuilder daoStr = new StringBuilder();
+            String daoName = entityName + "Dao";
+            daoStr.append("package " + daoRealtive.replaceAll("/", ".") + ";");
+            daoStr.append("\n");
+            daoStr.append("public interface " + daoName + " extends BaseDao<" + entityName + "> {");
+            daoStr.append("\n}");
+
+            StringBuilder daoImplStr = new StringBuilder();
+            String daoImplName = daoName + "impl";
+            daoImplStr.append("package " + daoRealtive.replaceAll("/", ".") + ";");
+            daoImplStr.append("\n");
+            daoImplStr.append("public class " + daoImplName + " extends BaseDaoImpl<" + entityName + "> " +
+                    "implements " + daoName + "{");
+            daoImplStr.append("\n}");
+
+            // service
+            StringBuilder serviceStr = new StringBuilder();
+            String serviceName = entityName + "Service";
+            serviceStr.append("package " + serviceRelative.replaceAll("/", ".") + ";");
+            serviceStr.append("\n");
+            serviceStr.append("public interface " + serviceName + " extends BaseService<" + entityName + "> {");
+            serviceStr.append("\n}");
+
+            StringBuilder serviceImplStr = new StringBuilder();
+            String serviceImplName = serviceName + "Impl";
+            serviceImplStr.append("package " + serviceRelative.replaceAll("/", ".") + ";");
+            serviceImplStr.append("\n");
+            serviceImplStr.append("public class " + serviceImplName + " extends BaseServiceImpl<" + entityName + "> " +
+                    "implements " + serviceName+ "{");
+            serviceImplStr.append("\n}");
+
+//            generateFile(entityLocation, firstLetterConverUppercase(underlineToHump(tableName)), sb.toString());
+//            generateFile(daoLocation, daoName, daoStr.toString());
+//            generateFile(daoLocation, daoImplName, daoImplStr.toString());
+//            generateFile(serviceLocation, serviceName, serviceStr.toStri
+//            g());
+            generateFile(serviceLocation, serviceImplName, serviceImplStr.toString());
         }
     }
 
-    public static void generateFile(String clssName, String entityInfo) throws IOException {
-        File file = new File(entityLocation);
+    public static void generateFile(String location, String clssName, String entityInfo) throws IOException {
+        File file = new File(location);
+                ;
         if (!file.exists()) {
             file.mkdirs();
         }
 
         BufferedOutputStream bufferedOutputStream = null;
-        bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(entityLocation + File.separator + clssName + FILE_SUFFIX));
+        bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(location + File.separator + clssName + FILE_SUFFIX));
         bufferedOutputStream.write(entityInfo.getBytes());
         bufferedOutputStream.flush();
         bufferedOutputStream.close();
