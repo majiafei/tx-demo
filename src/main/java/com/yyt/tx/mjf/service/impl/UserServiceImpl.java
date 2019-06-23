@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @Description:
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -51,6 +52,56 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
 //        IPage<User> page1 = this.baseMapper.selectPage(page, null);
 
         return this.baseMapper.selectPage(page, null);
+    }
+
+    @Override
+    @Transactional
+    public void save() {
+/*        User user = new User();
+        user.setUseAge(30);
+        user.setUserName("majiafeitest");
+        user.setCreateTime(new Date());
+
+        save(user);
+        *//**
+         * 如果沒有加事务，抛出异常数据照常插入
+         * 加了事务，抛出异常，数据不会插入(默认抛出RuntimeException，事务才会回滚)
+         *//*
+       throw new RuntimeException();*/
+
+        // save方法调用save1方法，save方法有事务，save1方法也加入了事务，抛出异常，也会回滚
+        save1();
+    }
+
+    private void save1() {
+/*        User user = new User();
+        user.setUseAge(30);
+        user.setUserName("majiafeitest");
+        user.setCreateTime(new Date());
+
+        save(user);
+        throw new RuntimeException();*/
+
+        User user = new User();
+        user.setUseAge(30);
+        user.setUserName("majiafeitest");
+        user.setCreateTime(new Date());
+
+        save(user);
+
+        // save2也有事务， 抛出异常save1和save2方法都会回滚
+        save2();
+    }
+
+    private void save2() {
+        User user = new User();
+        user.setUseAge(33);
+        user.setUserName("majiafeitest");
+        user.setCreateTime(new Date());
+
+        save(user);
+
+        throw new RuntimeException();
     }
 
     private void a(User user) {
