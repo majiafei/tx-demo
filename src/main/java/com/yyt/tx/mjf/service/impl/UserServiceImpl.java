@@ -2,7 +2,6 @@ package com.yyt.tx.mjf.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yyt.tx.mjf.entity.User;
@@ -10,13 +9,12 @@ import com.yyt.tx.mjf.mapper.UserMapper;
 import com.yyt.tx.mjf.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @ClassName: UserServiceImpl
@@ -54,7 +52,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return this.baseMapper.selectPage(page, null);
     }
 
-    @Override
     @Transactional
     public void save() {
 /*        User user = new User();
@@ -85,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = new User();
         user.setUseAge(30);
         user.setUserName("majiafeitest");
-        user.setCreateTime(new Date());
+//        user.setCreateTime(new Date());
 
         save(user);
 
@@ -97,7 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = new User();
         user.setUseAge(33);
         user.setUserName("majiafeitest");
-        user.setCreateTime(new Date());
+//        user.setCreateTime(new Date());
 
         save(user);
 
@@ -112,6 +109,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public IPage<User> list1(Page page, User user) {
         return this.baseMapper.selectPage(page, new QueryWrapper<User>().like("user_name",
                 user.getUserName()==null ? "" : user.getUserName()));
+    }
+
+    public static void main(String[] args) throws ParseException {
+        String dateStr = "2018-06-11T00:00:00";
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date parse = sdf.parse(dateStr);
+        System.out.println(parse);
     }
 
 }
