@@ -138,7 +138,31 @@ public class DescartesUtils {
             list.add(listSub2);
             list.add(listSub3);
             List<List<String>> result = new ArrayList<List<String>>();
-            descartes(list, result, 0, new ArrayList<String>());
+            dikaerji(list, 0, Lists.newArrayList(), result);
             System.out.println(JsonUtils.fromObjectToString(result));
+    }
+
+    public static void dikaerji(List<List<String>> data, int layer, List<String> curList, List<List<String>> resultList) {
+        if (layer < data.size() - 1) {
+            if (data.get(layer).size() == 0) {
+                dikaerji(data, layer + 1, curList, resultList);
+            } else {
+                for (int i = 0; i < data.get(layer).size(); i++) {
+                    List<String> temList = Lists.newArrayList(curList);
+                    temList.add(data.get(layer).get(i));
+                    dikaerji(data, layer + 1, temList, resultList);
+                }
+            }
+        } else {
+            if (data.get(layer).size() == 0) {
+               resultList.add(curList);
+            } else {
+                for (int i = 0; i < data.get(layer).size(); i++) {
+                    List<String> temList = Lists.newArrayList(curList);
+                    temList.add(data.get(layer).get(i));
+                    resultList.add(temList);
+                }
+            }
+        }
     }
 }
