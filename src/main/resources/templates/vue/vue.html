@@ -12,12 +12,15 @@
     </style>
 </head>
 <body>
-    <table id="app">
+<div id="app">
+    <table>
         <tr>
             <td ><input placeholder="请输入姓名" id="name" v-model="student.name"></td>
             <td><input placeholder="请输入年龄" id="age" v-model="student.age"></td>
             <td><input value="添加" @click="add" type="button"></td>
         </tr>
+    </table>
+    <table >
         <tr>
             <th>序号</th>
             <th>姓名</th>
@@ -30,6 +33,7 @@
             <td><input type="button" value="删除" @click="del(index)"></td>
         </tr>
     </table>
+</div>
 </body>
 
 <script>
