@@ -5,10 +5,7 @@ import com.google.common.collect.Maps;
 import com.yyt.tx.mjf.common.util.JsonUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @ClassName: DescartesUtils
@@ -62,6 +59,30 @@ public class DescartesUtils {
         System.out.println(JsonUtils.fromObjectToString(resultList));
     }
 
+
+    private static void descartes(List<List<String>> dimvalue, List<List<String>> result, int layer, List<String> curList) {
+        if (layer < dimvalue.size() - 1) {
+            if (dimvalue.get(layer).size() == 0) {
+                descartes(dimvalue, result, layer + 1, curList);
+            } else {
+                for (int i = 0; i < dimvalue.get(layer).size(); i++) {
+                    List<String> list = new ArrayList<String>(curList);
+                    list.add(dimvalue.get(layer).get(i));
+                    descartes(dimvalue, result, layer + 1, list);
+                }
+            }
+        } else if (layer == dimvalue.size() - 1) {
+            if (dimvalue.get(layer).size() == 0) {
+                result.add(curList);
+            } else {
+                for (int i = 0; i < dimvalue.get(layer).size(); i++) {
+                    List<String> list = new ArrayList<String>(curList);
+                    list.add(dimvalue.get(layer).get(i));
+                    result.add(list);
+                }
+            }
+        }}
+
     public static void generate2(Map<String, List<String>> dataMap) {
         Map<String, Object> resultMap = Maps.newHashMap();
         Map<String, String> newMap = null;
@@ -99,11 +120,25 @@ public class DescartesUtils {
      }
 
     public static void main(String[] args) {
-        Map<String, List<String>> map = Maps.newHashMap();
-        map.put("1", Lists.newArrayList("白色", "黑色"));
-        map.put("2", Lists.newArrayList("6GB", "8GB"));
-        map.put("3", Lists.newArrayList("128GB", "64GB"));
+            List<List<String>> list = new ArrayList<List<String>>();
+            List<String> listSub1 = new ArrayList<String>();
+            List<String> listSub2 = new ArrayList<String>();
+            List<String> listSub3 = new ArrayList<String>();
+            listSub1.add("1");
+            listSub1.add("2");
 
-        generate2(map);
+            listSub2.add("3");
+            listSub2.add("4");
+
+            listSub3.add("a");
+            listSub3.add("b");
+            listSub3.add("c");
+
+            list.add(listSub1);
+            list.add(listSub2);
+            list.add(listSub3);
+            List<List<String>> result = new ArrayList<List<String>>();
+            descartes(list, result, 0, new ArrayList<String>());
+            System.out.println(JsonUtils.fromObjectToString(result));
     }
 }
