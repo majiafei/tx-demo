@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 /**
  * @ClassName: User
  * @Auther: admin
@@ -25,5 +27,8 @@ public class User {
 
     @TableField("user_age")
     private Integer useAge;
+
+    @TableField("create_time")
+    private Date createTime;
 
 }

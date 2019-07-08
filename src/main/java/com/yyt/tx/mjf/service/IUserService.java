@@ -21,4 +21,6 @@ public interface IUserService {
 
     IPage<User> list(Page page);
 
+    void save();
+
 }

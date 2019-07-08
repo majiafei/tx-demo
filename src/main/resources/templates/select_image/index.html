@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>投票代码</title>
+
+<link rel="stylesheet" type="text/css" href="/select_image/css/menu.css" media="all">
+
+<script type="text/javascript" src="/select_image/js/jquery-1.9.1.js" ></script>
+
+<script  type="text/javascript">
+function toupiao(){
+	var id = $("#aaa").val();
+	alert(id);
+}
+</script>
+
+</head>
+<body>
+
+<div class="phone">
+
+	<input type="hidden" id="aaa" value="" />
+
+	<div class="sys_item_spec">
+		<dl class="clearfix iteminfo_parameter sys_item_specpara" data-sid="1">
+			<dd>
+				<ul class="sys_spec_img">
+					<li data-aid="1">
+						<a href="javascript:;"><img id="1" onClick="test(this.id)" src="/select_image/img/chlidone.jpg" width="180" height="135"  /></a>
+						<span>张三 票数：9089</span>
+						<i></i>
+					</li>
+					<li data-aid="2">
+						<a href="javascript:;"><img id="2" onClick="test(this.id)" src="/select_image/img/chlidtwo.jpg"  width="180" height="135"  /></a>
+						<span>张三 票数：9342</span>
+						<i></i>
+					</li>
+					<li data-aid="3">
+						<a href="javascript:;"><img id="3" onClick="test(this.id)" src="/select_image/img/chlidtwo.jpg" width="180" height="135" /></a>
+						<span>张三 票数：3254353</span>
+						<i></i>
+					</li>
+					<li data-aid="4">
+						<a href="javascript:;"><img id="3" onClick="test(this.id)" src="/select_image/img/chlidtwo.jpg" width="180" height="135"  /></a>
+						<span>里斯斯 <div style="display:inline">3432</div></span>
+						<i></i>
+					</li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+function test(id){
+	$("#aaa").val(id);
+}
+$(function(){
+
+	$(".sys_item_spec .sys_item_specpara").each(function(){
+		var i=$(this);
+		var p=i.find("ul>li");
+		p.click(function(){
+			if(!!$(this).hasClass("selected")){
+				$(this).removeClass("selected");
+				i.removeAttr("data-attrval");
+				 $("#aaa").val("");
+			}else{
+				// $(this).addClass("selected").siblings("li").removeClass("selected");
+				$(this).addClass("selected");
+				i.attr("data-attrval",$(this).attr("data-aid"))
+			}
+		})
+	})
+
+})
+</script>
+
+</body>
+</html>
