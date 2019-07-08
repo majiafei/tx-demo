@@ -2,6 +2,7 @@ package com.yyt.tx.mjf.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @Package: com.yyt.tx.mjf.controller
@@ -26,6 +27,18 @@ public class TestController {
     @GetMapping("/selectImage")
     public String selectImage() {
         return "select_image/index";
+    }
+
+    @GetMapping("/loading")
+    public String loading() {
+        return "loading/index";
+    }
+
+    @GetMapping("doLoading")
+    @ResponseBody
+    public String doLoading() throws InterruptedException {
+        Thread.sleep(1000);
+        return "hello";
     }
 
 }
