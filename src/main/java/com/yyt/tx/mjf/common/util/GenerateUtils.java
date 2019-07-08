@@ -1,7 +1,5 @@
 package com.yyt.tx.mjf.common.util;
 
-import com.yyt.tx.mjf.common.pojo.ColumnPojo;
-import com.yyt.tx.mjf.common.pojo.TablePojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -23,14 +21,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GenerateUtils {
 
-    private static  Map<String, String> primaryKeyMap = new ConcurrentHashMap<>();
-    private static  Map<String, List<String>> columnMap = new ConcurrentHashMap<>();
+    private static Map<String, String> primaryKeyMap = new ConcurrentHashMap<>();
+    private static Map<String, List<String>> columnMap = new ConcurrentHashMap<>();
 
-    private static final String entityLocation = "F:/myproject/idea/tx-demo/src/main/java/com/yyt/tx/mjf/entity";
+    private static final String entityLocation = "E:/mjf_project/tx-demo/src/main/java/com/yyt/tx/mjf/entity";
 
-    private static final String daoLocation = "F:/myproject/idea/tx-demo/src/main/java/com/yyt/tx/mjf/dao";
+    private static final String daoLocation = "E:/mjf_project/idea/tx-demo/src/main/java/com/yyt/tx/mjf/dao";
 
-    private static final String serviceLocation = "F:/myproject/idea/tx-demo/src/main/java/com/yyt/tx/mjf/service";
+    private static final String serviceLocation = "E:/mjf_project/idea/tx-demo/src/main/java/com/yyt/tx/mjf/service";
 
     private static final String serviceRelative = "com/yyt/tx/mjf/service";
 
@@ -38,9 +36,9 @@ public class GenerateUtils {
 
     private static final String daoRealtive = "com/yyt/tx/mjf/dao";
 
-  private static final String FILE_SUFFIX = ".java";
+    private static final String FILE_SUFFIX = ".java";
 
-    private static  Map<String, String> jdbcTypeToJavaTypeMap = new HashMap<>();
+    private static Map<String, String> jdbcTypeToJavaTypeMap = new HashMap<>();
 
     private static final String COLUMN_ANNOTATION_NAME = "@Column";
 
@@ -52,7 +50,7 @@ public class GenerateUtils {
         jdbcTypeToJavaTypeMap.put("DATETIME", "Date");
     }
 
-    public static void getColumnInfo() throws ClassNotFoundException, SQLException {
+    /*public static void getColumnInfo() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?serverTimezone=UTC", "root", "1111");
         // 获取元数据
@@ -94,7 +92,7 @@ public class GenerateUtils {
                 }
             }
         }
-    }
+    }*/
 
     public static void generateEntity() {
         File entityFile = new File(entityLocation);
@@ -127,24 +125,25 @@ public class GenerateUtils {
 
     /**
      * 将下划线转换成驼峰
+     *
      * @return
      */
     private static String underlineToHump(String str) {
         StringBuilder sb = new StringBuilder();
         String[] strArray = StringUtils.tokenizeToStringArray(str, "_");
         for (int i = 0; i < strArray.length; i++) {
-           if (i == 0) {
-               sb.append(strArray[i]);
-           } else {
-               sb.append(firstLetterConverUppercase(strArray[i]));
-           }
+            if (i == 0) {
+                sb.append(strArray[i]);
+            } else {
+                sb.append(firstLetterConverUppercase(strArray[i]));
+            }
         }
 
         return sb.toString();
     }
 
     private static String firstLetterConverUppercase(String str) {
-        if (StringUtils.isEmpty(str)){
+        if (StringUtils.isEmpty(str)) {
             return "";
         }
         char[] chars = str.toCharArray();
@@ -160,9 +159,9 @@ public class GenerateUtils {
     private final static Logger LOGGER = LoggerFactory.getLogger(GenerateUtils.class);
 
     private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/test?serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://192.168.4.5:3306/richart?serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "1111";
+    private static final String PASSWORD = "richart";
 
     private static final String SQL = "SELECT * FROM ";// 数据库操作
 
@@ -191,10 +190,11 @@ public class GenerateUtils {
 
     /**
      * 关闭数据库连接
+     *
      * @param conn
      */
     public static void closeConnection(Connection conn) {
-        if(conn != null) {
+        if (conn != null) {
             try {
                 conn.close();
             } catch (SQLException e) {
@@ -214,8 +214,8 @@ public class GenerateUtils {
             //获取数据库的元数据
             DatabaseMetaData db = conn.getMetaData();
             //从元数据中获取到所有的表名
-            rs = db.getTables("test", null, null, new String[] { "TABLE" });
-            while(rs.next()) {
+            rs = db.getTables("richart", null, null, new String[]{"TABLE"});
+            while (rs.next()) {
                 tableNames.add(rs.getString(3));
             }
         } catch (SQLException e) {
@@ -233,6 +233,7 @@ public class GenerateUtils {
 
     /**
      * 获取表中所有字段名称
+     *
      * @param tableName 表名
      * @return
      */
@@ -268,6 +269,7 @@ public class GenerateUtils {
 
     /**
      * 获取表中所有字段类型
+     *
      * @param tableName
      * @return
      */
@@ -303,6 +305,7 @@ public class GenerateUtils {
 
     /**
      * 获取表中字段的所有注释
+     *
      * @param tableName
      * @return
      */
@@ -337,74 +340,80 @@ public class GenerateUtils {
 
     public static void generateEntity_2() throws IOException {
         List<String> tableNames = getTableNames();
+        System.out.println(tableNames);
 
         for (String tableName : tableNames) {
-            StringBuilder sb = new StringBuilder();
-            String entityName = firstLetterConverUppercase(underlineToHump(tableName));
-            sb.append("package " + entityRalative.replaceAll("/", ".")
-                    + ";");
-            sb.append("\n");
-            sb.append("import java.lang.*;");
-            sb.append("\n");
-            sb.append("import java.util.*;");
-            sb.append("\n");
-            sb.append("public class " + entityName + "{");
-            sb.append("\n");
-            List<String> columnNames = getColumnNames(tableName);
-            List<String> columnTypes = getColumnTypes(tableName);
-            for (int i = 0; i < columnNames.size(); i++) {
-//                sb.append(COLUMN_ANNOTATION_NAME + "(value = \"" + columnNames.get(i) + "\")");// TODO
+            if (tableName.equals("lazada_global_site_price")) {
+                getColumnComments(tableName);
+                StringBuilder sb = new StringBuilder();
+                String entityName = firstLetterConverUppercase(underlineToHump(tableName));
+                sb.append("package " + entityRalative.replaceAll("/", ".")
+                        + ";");
                 sb.append("\n");
-                sb.append("private " + jdbcTypeToJavaTypeMap.get(columnTypes.get(i).toUpperCase()) + " " + underlineToHump(columnNames.get(i)));
-                sb.append(";");
+                sb.append("import java.lang.*;");
                 sb.append("\n");
+                sb.append("import java.util.*;");
+                sb.append("\n");
+                sb.append("public class " + entityName + "{");
+                sb.append("\n");
+                List<String> columnNames = getColumnNames(tableName);
+                List<String> columnTypes = getColumnTypes(tableName);
+                for (int i = 0; i < columnNames.size(); i++) {
+                    sb.append("\t/** " + getColumnComments(tableName).get(i) + " */");
+                    sb.append("\n");
+                    sb.append("\t" + COLUMN_ANNOTATION_NAME + "(name = \"" + columnNames.get(i) + "\")");
+                    sb.append("\n");
+                    sb.append("\tprivate " + jdbcTypeToJavaTypeMap.get(columnTypes.get(i).toUpperCase()) + " " + underlineToHump(columnNames.get(i)));
+                    sb.append(";");
+                    sb.append("\n");
+                    sb.append("\n");
+                }
+                sb.append("}");
+
+                // dao
+                StringBuilder daoStr = new StringBuilder();
+                String daoName = entityName + "Dao";
+                daoStr.append("package " + daoRealtive.replaceAll("/", ".") + ";");
+                daoStr.append("\n");
+                daoStr.append("public interface " + daoName + " extends BaseDao<" + entityName + "> {");
+                daoStr.append("\n}");
+
+                StringBuilder daoImplStr = new StringBuilder();
+                String daoImplName = daoName + "impl";
+                daoImplStr.append("package " + daoRealtive.replaceAll("/", ".") + ";");
+                daoImplStr.append("\n");
+                daoImplStr.append("public class " + daoImplName + " extends BaseDaoImpl<" + entityName + "> " +
+                        "implements " + daoName + "{");
+                daoImplStr.append("\n}");
+
+                // service
+                StringBuilder serviceStr = new StringBuilder();
+                String serviceName = entityName + "Service";
+                serviceStr.append("package " + serviceRelative.replaceAll("/", ".") + ";");
+                serviceStr.append("\n");
+                serviceStr.append("public interface " + serviceName + " extends BaseService<" + entityName + "> {");
+                serviceStr.append("\n}");
+
+                StringBuilder serviceImplStr = new StringBuilder();
+                String serviceImplName = serviceName + "Impl";
+                serviceImplStr.append("package " + serviceRelative.replaceAll("/", ".") + ";");
+                serviceImplStr.append("\n");
+                serviceImplStr.append("public class " + serviceImplName + " extends BaseServiceImpl<" + entityName + "> " +
+                        "implements " + serviceName + "{");
+                serviceImplStr.append("\n}");
+
+                generateFile(entityLocation, firstLetterConverUppercase(underlineToHump(tableName)), sb.toString());
+                generateFile(daoLocation, daoName, daoStr.toString());
+                generateFile(daoLocation, daoImplName, daoImplStr.toString());
+                generateFile(serviceLocation, serviceName, serviceStr.toString());
+                generateFile(serviceLocation, serviceImplName, serviceImplStr.toString());
             }
-            sb.append("}");
-
-            // dao
-            StringBuilder daoStr = new StringBuilder();
-            String daoName = entityName + "Dao";
-            daoStr.append("package " + daoRealtive.replaceAll("/", ".") + ";");
-            daoStr.append("\n");
-            daoStr.append("public interface " + daoName + " extends BaseDao<" + entityName + "> {");
-            daoStr.append("\n}");
-
-            StringBuilder daoImplStr = new StringBuilder();
-            String daoImplName = daoName + "impl";
-            daoImplStr.append("package " + daoRealtive.replaceAll("/", ".") + ";");
-            daoImplStr.append("\n");
-            daoImplStr.append("public class " + daoImplName + " extends BaseDaoImpl<" + entityName + "> " +
-                    "implements " + daoName + "{");
-            daoImplStr.append("\n}");
-
-            // service
-            StringBuilder serviceStr = new StringBuilder();
-            String serviceName = entityName + "Service";
-            serviceStr.append("package " + serviceRelative.replaceAll("/", ".") + ";");
-            serviceStr.append("\n");
-            serviceStr.append("public interface " + serviceName + " extends BaseService<" + entityName + "> {");
-            serviceStr.append("\n}");
-
-            StringBuilder serviceImplStr = new StringBuilder();
-            String serviceImplName = serviceName + "Impl";
-            serviceImplStr.append("package " + serviceRelative.replaceAll("/", ".") + ";");
-            serviceImplStr.append("\n");
-            serviceImplStr.append("public class " + serviceImplName + " extends BaseServiceImpl<" + entityName + "> " +
-                    "implements " + serviceName+ "{");
-            serviceImplStr.append("\n}");
-
-//            generateFile(entityLocation, firstLetterConverUppercase(underlineToHump(tableName)), sb.toString());
-//            generateFile(daoLocation, daoName, daoStr.toString());
-//            generateFile(daoLocation, daoImplName, daoImplStr.toString());
-//            generateFile(serviceLocation, serviceName, serviceStr.toStri
-//            g());
-            generateFile(serviceLocation, serviceImplName, serviceImplStr.toString());
         }
     }
 
     public static void generateFile(String location, String clssName, String entityInfo) throws IOException {
         File file = new File(location);
-                ;
+        ;
         if (!file.exists()) {
             file.mkdirs();
         }

@@ -93,7 +93,6 @@ myChart.setOption(option);
 $.ajax({
     url: '/echarts/count',
     success: function (result) {
-        console.info(result)
         myChart.setOption({
             legend: {
                 data:result.legend
