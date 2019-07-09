@@ -41,4 +41,19 @@ public class TestController {
         return "hello";
     }
 
+    @GetMapping("/discount2")
+    public String discount2() {
+        return "discount/discount_list";
+    }
+
+    @GetMapping("/discount_add")
+    public String discountAdd() {
+        return "discount/dicount_add";
+    }
+
+    @GetMapping("/nav")
+    public String nav() {
+        return "nav/nav";
+    }
+
 }
