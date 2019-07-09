@@ -117,10 +117,11 @@
 </script>
 
 <script>
-    layui.use(['table', 'laydate','element'], function () {
+    layui.use(['table', 'laydate', 'element'], function () {
         var table = layui.table;
         var form = layui.form;
         var laydate = layui.laydate;
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
         table.render({
             elem: '#test'
@@ -192,6 +193,12 @@
                                 format: 'yyyy-MM-dd HH:mm',
                                 min: new Date().toDateString()
                             });
+
+                            //监听导航点击
+                            element.on('nav(demo)', function (elem) {
+                                console.log(elem)
+                                // layer.msg(elem.text());
+                            });
                         }
                     });
                     break;
@@ -249,13 +256,9 @@
             return false;
         });
 
-        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
-        //监听导航点击
-        element.on('nav(demo)', function(elem){
-            //console.log(elem)
-            layer.msg(elem.text());
-        });
+
+
     });
 </script>
 </html>

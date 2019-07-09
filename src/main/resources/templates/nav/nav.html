@@ -16,7 +16,7 @@
     <div class="layui-side">
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree" lay-filter="demo" style="margin-right: 10px;height: 500px;">
-                <li class="layui-nav-item"><a href="/discount2" target="_blank">云市场</a></li>
+                <li class="layui-nav-item"><a lay-href="/discount2" >云市场</a></li>
                 <li class="layui-nav-item"><a lay-href="">社区</a></li>
             </ul>
         </div>
@@ -28,7 +28,7 @@
         <ul class="layui-tab-title">
         </ul>
         <div class="layui-tab-content">
-            <iframe src="/discount2" style="width: 80%;height: 600px"></iframe>
+
         </div>
     </div>
 </div>
@@ -38,10 +38,9 @@
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
         //监听导航点击
-        // element.on('nav(demo)', function(elem){
-        //     //console.log(elem)
-        //     layer.msg(elem.text());
-        // });
+        element.on('nav(demo)', function(elem){
+            $(".layui-tab-content").append("<iframe src='/discount_add' class='admin-iframe'></iframe>")
+        });
     });
 </script>
 
