@@ -1,8 +1,16 @@
 package com.yyt.tx.mjf.controller;
 
+import com.google.common.collect.Lists;
+import com.yyt.tx.mjf.common.pojo.LayuiResponseResult;
+import com.yyt.tx.mjf.entity.User;
+import com.yyt.tx.mjf.entity.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Package: com.yyt.tx.mjf.controller
@@ -55,5 +63,27 @@ public class TestController {
     public String nav() {
         return "nav/nav";
     }
+
+    @GetMapping("/test/list")
+    @ResponseBody
+    public LayuiResponseResult list() {
+        List<UserInfo> userInfoList = Lists.newArrayList();
+        for (int i = 0; i < 2; i++) {
+            UserInfo userInfo = new UserInfo();
+            userInfo.setId(i);
+            userInfo.setName("xxxx" + i);
+            userInfoList.add(userInfo);
+        }
+        List<User> userList = Lists.newArrayList();
+        User user = new User();
+        user.setUserId(1L);
+        user.setUseAge(2);
+        user.setUserName("xiaoming");
+        user.setUserInfoList(userInfoList);
+        userList.add(user);
+
+        return LayuiResponseResult.build(userList.size(), userList);
+    }
+
 
 }
