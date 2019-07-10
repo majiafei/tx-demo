@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName: User
@@ -30,5 +31,7 @@ public class User {
 
     @TableField("create_time")
     private Date createTime;
+
+    private List<UserInfo> userInfoList;
 
 }
