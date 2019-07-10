@@ -8,6 +8,13 @@
 
     <script src="/layui/layui.js"></script>
     <script src="/js/jquery.min.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell{
+            height: auto!important;
+            white-space: normal;
+        }
+    </style>
 </head>
 <body>
 <div class="layui-row">
@@ -116,6 +123,22 @@
     </ul>
 </script>
 
+<script type="text/html" id="userInfoTemp">
+<!--    {{d.userInfoList.length}}-->
+{{#  layui.each(d.userInfoList, function(index, item){ }}
+<li>
+    <span>{{ item.name }}</span>
+    <input type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" {{ d.userId== 1
+           ? 'checked' : '' }}>
+</li>
+{{#  }); }}
+</script>
+
+<script type="text/html" id="imgTemp">
+    <div ><img height="50px" src="https://img10.360buyimg.com/n1/s450x450_jfs/t1/48743/24/1091/112205/5cee1c4dEb76a7c08/57cf16bf7124eb18.jpg"></div>
+
+</script>
+
 <script>
     layui.use(['table', 'laydate', 'element'], function () {
         var table = layui.table;
@@ -125,18 +148,20 @@
 
         table.render({
             elem: '#test'
-            , url: '/user/list'
+            , url: '/test/list'
             , height: 'full-200'
             , width: 1000
             , toolbar: '#toolbarDemo'
             , cols: [
                 [
-                    {type: 'checkbox', fixed: 'left'}
+                    {type: 'checkbox'}
                     , {field: 'userId', width: 80, title: 'ID', sort: true}
                     , {field: 'userName', width: 200, title: '用户名', align: 'center', templet: '#switchTpl2'}
+                    , {field: 'userInfo', width: 200, title: '用户信息', align: 'center', templet: '#userInfoTemp'}
                     , {field: 'useAge', width: 80, title: '性别', sort: true, align: 'center', edit: 'text'},
                     , {field: 'sex', title: '性别', width: 85, templet: '#switchTpl', unresize: true}
-                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+                    , {field: 'img', title: '性别', width: 85, templet: '#imgTemp'}
+                    , {title: '操作', toolbar: '#barDemo', width: 150}
                 ]
             ]
             , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
