@@ -1,6 +1,7 @@
 package com.yyt.tx.mjf.entity;
 
 import lombok.Data;
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 /**
  * @ProjectName: house
@@ -17,4 +18,8 @@ public class UserInfo {
     private String name;
 
     private String sex;
+
+    private boolean on;
+
+
 }

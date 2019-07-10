@@ -72,6 +72,7 @@ public class TestController {
             UserInfo userInfo = new UserInfo();
             userInfo.setId(i);
             userInfo.setName("xxxx" + i);
+            userInfo.setOn(true);
             userInfoList.add(userInfo);
         }
         List<User> userList = Lists.newArrayList();
@@ -82,6 +83,13 @@ public class TestController {
         user.setUserInfoList(userInfoList);
         userList.add(user);
 
+
+        User user2 = new User();
+        user2.setUserId(2L);
+        user2.setUseAge(2);
+        user2.setUserName("xiaoming2");
+        user2.setUserInfoList(userInfoList);
+        userList.add(user2);
         return LayuiResponseResult.build(userList.size(), userList);
     }
 

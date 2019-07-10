@@ -128,7 +128,7 @@
 {{#  layui.each(d.userInfoList, function(index, item){ }}
 <li>
     <span>{{ item.name }}</span>
-    <input type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" {{ d.userId== 1
+    <input type="checkbox" value="{{item.id}}" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" {{ item.on
            ? 'checked' : '' }}>
 </li>
 {{#  }); }}
@@ -157,7 +157,7 @@
                     {type: 'checkbox'}
                     , {field: 'userId', width: 80, title: 'ID', sort: true}
                     , {field: 'userName', width: 200, title: '用户名', align: 'center', templet: '#switchTpl2'}
-                    , {field: 'userInfo', width: 200, title: '用户信息', align: 'center', templet: '#userInfoTemp'}
+                    , {field: 'userInfo', width: 200, title: '用户信息', align: 'center', templet: '#userInfoTemp', event: 'setSign'}
                     , {field: 'useAge', width: 80, title: '性别', sort: true, align: 'center', edit: 'text'},
                     , {field: 'sex', title: '性别', width: 85, templet: '#switchTpl', unresize: true}
                     , {field: 'img', title: '性别', width: 85, templet: '#imgTemp'}
@@ -234,7 +234,6 @@
         //监听行工具事件
         table.on('tool(test)', function (obj) {
             var data = obj.data;
-            //console.log(obj)
             if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     obj.del();
@@ -269,7 +268,28 @@
 
         //监听性别操作
         form.on('switch(switchTest)', function (obj) {
-            console.info(obj)
+            var value = this.value;
+            // 获取当前控件
+            var selectIfKey=obj.othis;
+            // 获取当前所在行
+            var parentTr = selectIfKey.parents("tr");
+            // 获取当前所在行的索引
+            var parentTrIndex = parentTr.attr("data-index");
+            var currentRow = table.cache.test[parentTrIndex];
+            var  userInfoList = currentRow.userInfoList;
+            for (var i = 0;i < userInfoList.length; i++) {
+                if (userInfoList[i].id == parseInt(value) ){
+                    if (obj.elem.checked) {
+                        userInfoList[i].on = true;
+                        break;
+                    } else {
+                        userInfoList[i].on = false;
+                        break;
+                    }
+                }
+            }
+
+            currentRow['userInfoList'] = userInfoList;
             layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
         });
 
@@ -280,9 +300,6 @@
             })
             return false;
         });
-
-
-
 
     });
 </script>
