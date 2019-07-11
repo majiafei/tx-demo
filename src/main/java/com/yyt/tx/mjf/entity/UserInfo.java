@@ -21,5 +21,7 @@ public class UserInfo {
 
     private boolean on;
 
+    private int age;
+
 
 }

@@ -6,6 +6,8 @@ import com.yyt.tx.mjf.entity.User;
 import com.yyt.tx.mjf.entity.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.PrintWriter;
@@ -73,6 +75,7 @@ public class TestController {
             userInfo.setId(i);
             userInfo.setName("xxxx" + i);
             userInfo.setOn(true);
+            userInfo.setAge(3);
             userInfoList.add(userInfo);
         }
         List<User> userList = Lists.newArrayList();
@@ -91,6 +94,13 @@ public class TestController {
         user2.setUserInfoList(userInfoList);
         userList.add(user2);
         return LayuiResponseResult.build(userList.size(), userList);
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public String update(@RequestBody List<User> userList){
+        System.out.println("====");
+        return "";
     }
 
 
