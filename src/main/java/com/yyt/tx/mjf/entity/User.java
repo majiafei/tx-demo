@@ -32,6 +32,7 @@ public class User {
     @TableField("create_time")
     private Date createTime;
 
+    @TableField(exist = false)
     private List<UserInfo> userInfoList;
 
 }

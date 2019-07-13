@@ -148,7 +148,8 @@
 <script>
     var discountObj = {
         table: undefined,
-        tableId: 'test'
+        tableId: 'test',
+        addRow: []
     }
     layui.use(['table', 'laydate', 'element'], function () {
         var table = layui.table;
@@ -157,11 +158,12 @@
         var laydate = layui.laydate;
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
-        table.render({
+        var tableIns = table.render({
             elem: '#test'
             , url: '/test/list'
             , height: 'full-200'
             , width: 1000
+            ,addRow:[]
             , toolbar: '#toolbarDemo'
             , cols: [
                 [
@@ -181,7 +183,7 @@
                 , groups: 1 //只显示 1 个连续页码
                 // ,first: true //不显示首页
                 // ,last: true //不显示尾页
-                , limit: 40
+                , limit: 10
             }
         });
 
@@ -226,7 +228,7 @@
                     layer.msg(checkStatus.isAll ? '全选' : '未全选');
                     break;
                 case 'addDiscount':
-                    layer.open({
+                   /* layer.open({
                         type: 1,
                         area: ['600px', '500px'],
                         content: $('#switchTpl4').html(), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
@@ -259,7 +261,36 @@
                                 // layer.msg(elem.text());
                             });
                         }
-                    });
+                    });*/
+                   var addRow = [{userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[{age: 10,name:'', on:false}]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]}
+                   ];
+                   discountObj.addRow = addRow;
+                   tableIns.reload({
+                       addRow: addRow
+                   });
+                   console.info(discountObj.addRow)
+                   $.ajax({
+                       url: '/update1',
+                       type: 'post',
+                       data: {data: JSON.stringify(discountObj.addRow)},
+                       success: function (result) {
+
+                       }
+                   });
+                   //window.open('discount_add', '_blank');
                     break;
             }
             ;
