@@ -2,6 +2,7 @@ package com.yyt.tx.mjf.controller;
 
 import com.google.common.collect.Lists;
 import com.yyt.tx.mjf.common.pojo.LayuiResponseResult;
+import com.yyt.tx.mjf.common.util.DateUtils;
 import com.yyt.tx.mjf.common.util.JsonUtils;
 import com.yyt.tx.mjf.entity.User;
 import com.yyt.tx.mjf.entity.UserInfo;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +90,9 @@ public class TestController {
         user.setUseAge(2);
         user.setUserName("xiaoming");
         user.setUserInfoList(userInfoList);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, 10);
+        user.setUpdateTimeStr(DateUtils.fromDateToStr(calendar.getTime(), DateUtils.dateTimeFormat));
         userList.add(user);
 
 
@@ -96,7 +101,18 @@ public class TestController {
         user2.setUseAge(2);
         user2.setUserName("xiaoming2");
         user2.setUserInfoList(userInfoList);
+        Calendar calendar2 = Calendar.getInstance();
+
+        calendar2.add(Calendar.SECOND, 20);
+        calendar2.add(Calendar.DAY_OF_YEAR, 13);
+        System.out.println(calendar.getTime());
+        user2.setUpdateTimeStr(DateUtils.fromDateToStr(calendar2.getTime(), DateUtils.dateTimeFormat));
         userList.add(user2);
+
+        for (int i = 0; i < 30; i++) {
+            userList.add(user2);
+        }
+
         return LayuiResponseResult.build(userList.size(), userList);
     }
 
