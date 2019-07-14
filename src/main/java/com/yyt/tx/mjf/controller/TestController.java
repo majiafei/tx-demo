@@ -149,4 +149,9 @@ public class TestController {
         return LayuiResponseResult.build(userList.size(), userList);
     }
 
+    @RequestMapping("/addProduts")
+    public String products() {
+        return "discount/add_products";
+    }
+
 }
