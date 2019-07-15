@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
+
+import javax.persistence.Transient;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +34,9 @@ public class User {
     @TableField("create_time")
     private Date createTime;
 
+    @TableField(exist = false)
     private List<UserInfo> userInfoList;
+
+
 
 }
