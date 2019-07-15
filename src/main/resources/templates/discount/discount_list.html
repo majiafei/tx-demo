@@ -148,7 +148,8 @@
 <script>
     var discountObj = {
         table: undefined,
-        tableId: 'test'
+        tableId: 'test',
+        addRow: []
     }
     layui.use(['table', 'laydate', 'element'], function () {
         var table = layui.table;
@@ -157,11 +158,12 @@
         var laydate = layui.laydate;
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
-        table.render({
+        var tableIns = table.render({
             elem: '#test'
             , url: '/test/list'
             , height: 'full-200'
             , width: 1000
+            ,addRow:[]
             , toolbar: '#toolbarDemo'
             , cols: [
                 [
@@ -172,6 +174,22 @@
                     , {field: 'age', width: 80, title: '性别', sort: true, align: 'center',  templet:'#ageTempt'},
                     , {field: 'sex', title: '性别', width: 85, templet: '#switchTpl'}
                     , {field: 'img', title: '性别', width: 85, templet: '#imgTemp'}
+                    , {field: 'time', title: '倒计时', width: 200, templet: function (d) {
+                        var oDate = new Date(); //获取日期对象
+                        var nowTime = oDate.getTime(); //现在的毫秒数
+                        var enddate = new Date(d.updateTimeStr);
+                        var targetTime = enddate.getTime(); // 截止时间的毫秒数
+                        var second = Math.floor((targetTime - nowTime) / 1000); //截止时间距离现在的秒数
+
+                        var day = Math.floor(second / (24 * 60 * 60)); //整数部分代表的是天；一天有24*60*60=86400秒 ；
+                        second = second % 86400; //余数代表剩下的秒数；
+                        var hour = Math.floor(second / 3600); //整数部分代表小时；
+                        second %= 3600; //余数代表 剩下的秒数；
+                        var minute = Math.floor(second / 60);
+                        second %= 60;
+                        var val = day + '天' + hour + '时' + minute + '分'+ second + '秒';
+                        return '<div class="se-second">' + val + '</div>';
+                    }}
                     , {title: '操作', toolbar: '#barDemo', width: 150}
                 ]
             ]
@@ -181,7 +199,34 @@
                 , groups: 1 //只显示 1 个连续页码
                 // ,first: true //不显示首页
                 // ,last: true //不显示尾页
-                , limit: 40
+                , limit: 10
+            },
+            done: function (res, curr, count) {
+                var data = res.data;
+                var obj = $(this);
+                $(".se-second").each(function (i, e) {
+                    var updateTimeStr = data[i].updateTimeStr;
+                    var timer = setInterval(function () {
+                        var oDate = new Date(); //获取日期对象
+                        var nowTime = oDate.getTime(); //现在的毫秒数
+                        var enddate = new Date(updateTimeStr);
+                        var targetTime = enddate.getTime(); // 截止时间的毫秒数
+                        var second = Math.floor((targetTime - nowTime) / 1000); //截止时间距离现在的秒数
+
+                        var day = Math.floor(second / (24 * 60 * 60)); //整数部分代表的是天；一天有24*60*60=86400秒 ；
+                        second = second % 86400; //余数代表剩下的秒数；
+                        var hour = Math.floor(second / 3600); //整数部分代表小时；
+                        second %= 3600; //余数代表 剩下的秒数；
+                        var minute = Math.floor(second / 60);
+                        second %= 60;
+                        if (second < 0) {
+                            $(e).html('结束')
+                            clearInterval(timer);
+                            return;
+                        }
+                        $(e).html(day + '天' + hour + '时' + minute + '分'+ second + '秒');
+                    }, 500)
+                });
             }
         });
 
@@ -226,7 +271,7 @@
                     layer.msg(checkStatus.isAll ? '全选' : '未全选');
                     break;
                 case 'addDiscount':
-                    layer.open({
+                   /* layer.open({
                         type: 1,
                         area: ['600px', '500px'],
                         content: $('#switchTpl4').html(), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
@@ -259,7 +304,36 @@
                                 // layer.msg(elem.text());
                             });
                         }
-                    });
+                    });*/
+                   var addRow = [{userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[{age: 10,name:'', on:false}]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]}
+                   ];
+                   discountObj.addRow = addRow;
+                   tableIns.reload({
+                       addRow: addRow
+                   });
+                   console.info(discountObj.addRow)
+                   $.ajax({
+                       url: '/update1',
+                       type: 'post',
+                       data: {data: JSON.stringify(discountObj.addRow)},
+                       success: function (result) {
+
+                       }
+                   });
+                   //window.open('discount_add', '_blank');
                     break;
             }
             ;
@@ -373,6 +447,49 @@
                 break;
             }
         }
+    }
+    var timer;
+    function run(enddate, i) {
+        getDate(enddate, i);
+        timer = setInterval("getDate('" + enddate + "',"+ i +")", 500);
+    }
+
+    function getDate(enddate,m) {
+        var oDate = new Date(); //获取日期对象
+
+        var nowTime = oDate.getTime(); //现在的毫秒数
+        var enddate = new Date(enddate);
+        var targetTime = enddate.getTime(); // 截止时间的毫秒数
+        var second = Math.floor((targetTime - nowTime) / 1000); //截止时间距离现在的秒数
+
+        var day = Math.floor(second / 24 * 60 * 60); //整数部分代表的是天；一天有24*60*60=86400秒 ；
+        second = second % 86400; //余数代表剩下的秒数；
+        var hour = Math.floor(second / 3600); //整数部分代表小时；
+        second %= 3600; //余数代表 剩下的秒数；
+        var minute = Math.floor(second / 60);
+        second %= 60;
+        var spanH = $('.se-txt')[0];
+        var spanM = $('.se-txt')[1];
+        var spanS = $('.se-txt')[2];
+        if (second <= 0) {
+            clearInterval(timer);
+            return;
+        }
+
+        $(".se-second").each(function (i, e) {
+            if (i == m) {
+                $(this).html(second);
+            }
+        });
+
+
+/*        spanH.innerHTML = tow(hour);
+        spanM.innerHTML = tow(minute);
+        spanS.innerHTML = tow(second);*/
+    }
+
+    function tow(n) {
+        return n >= 0 && n < 10 ? '0' + n : '' + n;
     }
 </script>
 </html>
