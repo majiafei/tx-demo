@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,7 +76,7 @@ public class TestController {
 
     @GetMapping("/test/list")
     @ResponseBody
-    public LayuiResponseResult list() {
+    public LayuiResponseResult list(HttpServletResponse response) {
         List<UserInfo> userInfoList = Lists.newArrayList();
         for (int i = 0; i < 2; i++) {
             UserInfo userInfo = new UserInfo();
@@ -97,6 +99,7 @@ public class TestController {
 
 
         User user2 = new User();
+        user2.setLAY_DISABLED(true);
         user2.setUserId(2L);
         user2.setUseAge(2);
         user2.setUserName("xiaoming2");
@@ -112,6 +115,10 @@ public class TestController {
         for (int i = 0; i < 30; i++) {
             userList.add(user2);
         }
+
+        Cookie cookie = new Cookie("name", "xiaoming");
+        cookie.setPath("/");
+        response.addCookie(cookie);
 
         return LayuiResponseResult.build(userList.size(), userList);
     }
@@ -152,6 +159,11 @@ public class TestController {
     @RequestMapping("/addProduts")
     public String products() {
         return "discount/add_products";
+    }
+
+    @RequestMapping("/searchselect")
+    public String searchselect() {
+        return "searchselect/index4";
     }
 
 }

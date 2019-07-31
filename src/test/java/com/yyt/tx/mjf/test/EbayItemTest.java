@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @ProjectName: house
  * @Package: com.yyt.tx.mjf.test
  * @ClassName: EbayItemTest
  * @Author: majiafei
@@ -29,16 +28,27 @@ public class EbayItemTest extends TxDemoApplicationTests {
 
     @Test
     public void testGet() {
-        EabyItemEntity eabyItemEntity = ebayItemMapper.selectById(509793);
+        EabyItemEntity eabyItemEntity = ebayItemMapper.selectById(509794);
+
+        EbayItem ebayItem = null;
+        for (int  i = 6060606;i < 10000000; i++) {
+            ebayItem = new EbayItem();
+            ebayItem.setId(i);
+            ebayItem.setTitle(eabyItemEntity.getTitle());
+            ebayItem.setDescription(eabyItemEntity.getDescription());
+
+            ebayItemRepository.save(ebayItem);
+        }
+
         Assert.assertNotNull(eabyItemEntity);
     }
 
     @Test
     public void testGetByPage() {
-        IPage<EabyItemEntity> page = new Page<>(1, 1000);
+        IPage<EabyItemEntity> page = new Page<>(70, 5000);
         IPage<EabyItemEntity> entityIPage = null;
         EbayItem ebayItem = null;
-        int i = 1;
+        int i = 70;
         do {
             entityIPage = ebayItemMapper.selectPage(page, null);
             for (EabyItemEntity eabyItemEntity : entityIPage.getRecords()) {

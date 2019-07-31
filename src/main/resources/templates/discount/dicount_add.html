@@ -68,6 +68,11 @@
 
         //监听提交
         form.on('submit(demo1)', function(data){
+            var tishi = layer.open({
+                shadeClose: false
+                ,type: 2
+                ,content: '发布中...'
+            });
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
             })
