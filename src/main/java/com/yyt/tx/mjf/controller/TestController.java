@@ -166,4 +166,14 @@ public class TestController {
         return "searchselect/index4";
     }
 
+    @RequestMapping("/form")
+    public String form() {
+        return "form/form";
+    }
+
+    @RequestMapping("/fangdajing")
+    public String fangdajing() {
+        return "image/fangdajing/index";
+    }
+
 }
