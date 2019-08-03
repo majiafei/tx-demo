@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <script src="/js/jquery.min.js"></script>
+
+    <script src="/layui/layui.js"></script>
+
+    <style>
+        p{
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 10px;
+            margin-left: 0px;
+        }
+        .remove:hover{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-row">
+    <div class="layui-col-sm2" style="position: relative">
+        <img src="/img/a1.png" style="width: 100px">
+        <span onclick="remove(this)" class="remove"  style="position: absolute; top:1px; left: 4px;background-color: white;color: red">X</span>
+    </div>
+    <div class="layui-col-sm2" style="position: relative">
+        <img src="/img/a2.png" style="width: 100px">
+        <span onclick="remove(this)" class="remove"  style="position: absolute; top:1px; left: 4px;background-color: white;color: red">X</span>
+    </div>
+    <div class="layui-col-sm2" style="position: relative">
+        <img src="/img/a3.png" style="width: 100px">
+        <span onclick="remove(this)" class="remove"  style="position: absolute; top:1px; left: 4px;background-color: white;color: red">X</span>
+    </div>
+</div>
+</body>
+
+<script>
+  function remove(obj) {
+      $(obj).parent('div').remove();
+  }
+</script>
+</html>
