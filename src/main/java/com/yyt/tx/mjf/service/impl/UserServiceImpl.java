@@ -85,7 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = new User();
         user.setUseAge(30);
         user.setUserName("majiafeitest");
-        user.setCreateTime(new Date());
+        //user.setCreateTime(new Date());
 
         save(user);
 
@@ -97,7 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = new User();
         user.setUseAge(33);
         user.setUserName("majiafeitest");
-        user.setCreateTime(new Date());
+        //user.setCreateTime(new Date());
 
         save(user);
 

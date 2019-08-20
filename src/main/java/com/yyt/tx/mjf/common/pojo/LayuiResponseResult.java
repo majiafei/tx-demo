@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 public class LayuiResponseResult<T> {
 
-    private long total;
+    private long count;
 
     private List<T> data;
 
@@ -23,13 +23,13 @@ public class LayuiResponseResult<T> {
 
     private String msg;
 
-    public LayuiResponseResult(long total, List<T> data) {
-        this.total = total;
+    public LayuiResponseResult(long count, List<T> data) {
+        this.count = count;
         this.data = data;
     }
 
-    public static <T> LayuiResponseResult build(long total, List<T> data) {
-        return new LayuiResponseResult(total, data);
+    public static <T> LayuiResponseResult build(long count, List<T> data) {
+        return new LayuiResponseResult(count, data);
     }
 
 }

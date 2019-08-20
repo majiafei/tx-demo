@@ -5,13 +5,13 @@ server:
 spring:
   druid:
     username: root
-    password: 1111
+    password: richart
     driverClassName:  com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC
+    url: jdbc:mysql://192.168.4.5:3306/richart?serverTimezone=UTC
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster- nodes: 192.168.221.100:9300
+      cluster- nodes: 192.168.91.130:9300
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true

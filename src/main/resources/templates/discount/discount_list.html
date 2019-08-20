@@ -260,6 +260,9 @@
                         url: '/update',
                         data: JSON.stringify(data),
                         type: 'POST',
+                        beforeSend: function(){
+                            loadingFlag = layer.msg('正在读取数据，请稍候……', { icon: 16, shade: 0.01,shadeClose:false,time:60000 });
+                        },
                         contentType: 'application/json',
                         success: function (result) {
                             console.info()

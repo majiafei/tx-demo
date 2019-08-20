@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>谷歌网站搜索页面 | jsfoot脚本特效 演示</title>
+<script type="text/javascript" src="/search/js/jquery-1.4.2.min.js"></script>
+</head>
+
+<body>
+
+<div id="page">
+
+    <form id="searchForm" method="post">
+		<fieldset>
+        
+           	<input id="s" type="text" />
+            
+            <input type="submit" value="Submit" id="submitButton" />
+            
+            <div id="searchInContainer">
+                <input type="radio" name="check" value="site" id="searchSite" checked />
+                <label for="searchSite" id="siteNameLabel">Search</label>
+                
+                <input type="radio" name="check" value="web" id="searchWeb" />
+                <label for="searchWeb">Search The Web</label>
+			</div>
+                        
+            <ul class="icons">
+                <li class="web" title="Web Search" data-searchType="web">Web</li>
+                <li class="images" title="Image Search" data-searchType="images">Images</li>
+                <li class="news" title="News Search" data-searchType="news">News</li>
+                <li class="videos" title="Video Search" data-searchType="video">Videos</li>
+            </ul>
+            
+        </fieldset>
+    </form>
+
+    <div id="resultsDiv"></div>
+    
+</div>
+
+<link rel="stylesheet" type="text/css" href="styles.css" />
+<script src="/search/js/script.js"></script>
+</body>
+</html>
