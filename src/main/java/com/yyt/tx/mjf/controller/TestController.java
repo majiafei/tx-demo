@@ -1,6 +1,7 @@
 package com.yyt.tx.mjf.controller;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.yyt.tx.mjf.common.pojo.LayuiResponseResult;
 import com.yyt.tx.mjf.common.util.DateUtils;
 import com.yyt.tx.mjf.common.util.JsonUtils;
@@ -9,10 +10,14 @@ import com.yyt.tx.mjf.entity.UserInfo;
 import com.yyt.tx.mjf.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
@@ -174,6 +179,35 @@ public class TestController {
     @RequestMapping("/fangdajing")
     public String fangdajing() {
         return "image/fangdajing/index";
+    }
+
+    @RequestMapping("jd02")
+    public String jd02() {
+        return "jd02/index";
+    }
+
+    @RequestMapping("/editor")
+    public String editor() {
+        return "editor/editor";
+    }
+
+    @RequestMapping("upload")
+    @ResponseBody
+    public Map upload(@RequestParam("imgFile")MultipartFile file) {
+        try {
+            FileCopyUtils.copy(file.getBytes(), new File("D:/images/", file.getOriginalFilename()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("error", 0);
+        map.put("url", "https://img11.360buyimg.com/n1/s450x450_jfs/t7426/50/2505612098/100683/f063609f/59afa20dNa6db56e6.jpg");
+        return map;
+    }
+
+    @RequestMapping("/deleImg")
+    public String deleImg() {
+        return "picture/deleteImage";
     }
 
 }
