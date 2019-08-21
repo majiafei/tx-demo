@@ -162,6 +162,7 @@ public class TestController {
     }
 
     @RequestMapping("/addProduts")
+
     public String products() {
         return "discount/add_products";
     }
