@@ -211,4 +211,9 @@ public class TestController {
         return "picture/deleteImage";
     }
 
+    @RequestMapping("inputSelect")
+    public String inputSelect() {
+        return "input_select/input_select";
+    }
+
 }
