@@ -1,6 +1,7 @@
 package com.yyt.tx.mjf.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.omg.CORBA.PRIVATE_MEMBER;
 
 /**
@@ -12,6 +13,7 @@ import org.omg.CORBA.PRIVATE_MEMBER;
  * @Date: 2019/7/10 21:21
  */
 @Data
+@NoArgsConstructor
 public class UserInfo {
     private int id;
 

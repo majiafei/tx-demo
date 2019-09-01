@@ -8,8 +8,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.joda.time.DateTime;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * @Package: com.yyt.tx.mjf.utils
@@ -42,7 +45,7 @@ public class JWTUtils {
      * @param token
      * @return
      */
-    public Jws<Claims> parseToken(PublicKey publicKey, String token) {
+    public static Jws<Claims> parseToken(PublicKey publicKey, String token) {
         return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
     }
 
@@ -52,13 +55,28 @@ public class JWTUtils {
      * @param token token
      * @return 用户信息
      */
-    public UserInfo getUserInfo(PublicKey publicKey, String token) {
-        Jws<Claims> claimsJws = parseToken(publicKey, token);
-        Claims body = claimsJws.getBody();
-        int userId = ObjectUtils.toInt(body.get(JWTConstants.USER_ID));
-        String userName = ObjectUtils.toString(body.get(JWTConstants.USER_NAME));
+    public static UserInfo getUserInfo(PublicKey publicKey, String token) {
+        try {
+            Jws<Claims> claimsJws = parseToken(publicKey, token);
+            Claims body = claimsJws.getBody();
+            int userId = ObjectUtils.toInt(body.get(JWTConstants.USER_ID));
+            String userName = ObjectUtils.toString(body.get(JWTConstants.USER_NAME));
 
-        return new UserInfo(userId, userName);
+            return new UserInfo(userId, userName);
+        } catch (Exception e) {
+            // 解析出错或者token过期
+            return null;
+        }
+    }
+
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+/*        UserInfo userInfo = new UserInfo(2, "xiaohong");
+        String token = createToken(userInfo, RSAUtils.getPrivateKey("D:/key/private_key.rsa"), 1);
+        System.out.println(token);*/
+
+        UserInfo userInfo1 = getUserInfo(RSAUtils.getPublicKey("D:/key/public_key.rsa"), "eyJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOjIsInVzZXJOYW1lIjoieGlhb2hvbmciLCJleHAiOjE1NjczNDc2MzZ9.KGi8Cun4q9cgTvdbDeDKad2cLxlcTeUjcHCFXmrp5y7MuqtlyF7C3nQqH_jQcWRvLa8tlVQrXbUvwhdy2gOYEbms-Jvkj8d4Q-tui2bw3xIE7ozyLTRkgxiQjsnBywUz5Rxo3EATieTARjzdqUVLCtyn_0e_FDeMssDaqWbsmw0");
+        System.out.println(userInfo1.getId());
+        System.out.println(userInfo1.getName());
     }
 
 }
