@@ -24,4 +24,8 @@ public class UserInfo {
     private int age;
 
 
+    public UserInfo(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

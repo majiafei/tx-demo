@@ -216,4 +216,9 @@ public class TestController {
         return "input_select/input_select";
     }
 
+    @RequestMapping("vue")
+    public String vue() {
+        return "vue/vue";
+    }
+
 }

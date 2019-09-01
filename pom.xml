@@ -17,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <mp.springboot.version>3.0.7.1</mp.springboot.version>
+        <jwt.version>0.9.0</jwt.version>
     </properties>
 
     <dependencies>
@@ -89,10 +90,25 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- jwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
