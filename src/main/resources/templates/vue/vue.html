@@ -16,7 +16,7 @@
 
     <script src="/js/vue.min.js"></script>
 
-    <script charset="utf-8" src="/kindeditor/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="/kindeditor/kindeditor-all.js"></script>
     <script charset="utf-8" src="/kindeditor/lang/zh-CN.js"></script>
     <script charset="utf-8" src="/kindeditor/plugins/code/prettify.js"></script>
 
@@ -52,18 +52,24 @@
         </tr>
     </table>
 
-    <span>{{htmlContent.length}}</span>
+<!--    <span>{{htmlContent.length}}</span>
     <div id="content" class="col-sm-offset-2" contenteditable="true" @keyup="inputDiv" @input="htmlContent=$event.target.innerHTML" style="width: 300px;height: 300px" v-html="htmlContent">
 
-    </div>
+    </div>-->
 
     <form name="example" method="post" action="/sumitEditor">
         <div class="layui-row" v-for="student in students">
             {{student.name.length}}
-            <textarea  class="example" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;" v-model="student.name"></textarea>
+            <textarea :id="'student'+student.id" class="example" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"  v-model="student.name"></textarea>
+        </div>
+
+        <div class="layui-row" v-for="student in students">
+            {{student.note.length}}
+            <textarea :id="'note'+student.id" class="example" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"  v-model="student.note"></textarea>
         </div>
         <br />
     </form>
+    <button id="subnitBtn">提交</button>
 </div>
 </body>
 
@@ -82,13 +88,8 @@
             el: '#app',
             data: {
                 students: [
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10}
+                    {name: 'zhangsan', age: 10, id:1, note: ''},
+                    {name: 'zhangsan', age: 10, id:2, note: ''}
                     ],
                 student: {
                     name: 'dd',
@@ -113,10 +114,15 @@
             }
         })
         vue = app;
+
+        $("#subnitBtn").click(function () {
+            console.info(vue.students)
+        });
     });
 
     function set_focus()
     {
+        alert()
         el=document.getElementById('content');
         //el=el[0];  //jquery 对象转dom对象
         el.focus();
@@ -139,13 +145,33 @@
         }}
 
     KindEditor.ready(function(K) {
-        window.editor = K.create('.example', {
-            items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic'],
-            afterChange: function () {
-                console.info(this)
-                vue.students[0].name = this.html();
-            }
-        });
+        for (var i = 0; i < vue.students.length; i++) {
+            window.editor = K.create('#student'+vue.students[i].id, {
+                items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
+                id:'student'+vue.students[i].id,
+                afterChange: function () {
+                   for (var i = 0; i < vue.students.length; i++) {
+                       if ("student" + vue.students[i].id == this.id) {
+                           vue.students[i].name = this.html();
+                           break;
+                       }
+                   }
+                }
+            });
+
+            window.editor = K.create('#note'+vue.students[i].id, {
+                items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
+                id:'note'+vue.students[i].id,
+                afterChange: function () {
+                    for (var i = 0; i < vue.students.length; i++) {
+                        if ("note" + vue.students[i].id == this.id) {
+                            vue.students[i].note = this.html();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
     });
 </script>
 
