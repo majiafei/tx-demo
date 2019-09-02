@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <link rel="stylesheet" href="/kindeditor/themes/default/default.css" />
+    <link rel="stylesheet" href="/kindeditor/plugins/code/prettify.css" />
+
+
     <link rel="stylesheet" href="/layui/css/layui.css">
     <link rel="stylesheet" href="/css/admin.css">
 
@@ -11,6 +15,11 @@
     <script src="/layui/layui.js"></script>
 
     <script src="/js/vue.min.js"></script>
+
+    <script charset="utf-8" src="/kindeditor/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="/kindeditor/lang/zh-CN.js"></script>
+    <script charset="utf-8" src="/kindeditor/plugins/code/prettify.js"></script>
+
     <style>
         td{
             text-align: center;
@@ -42,10 +51,24 @@
             <td><input type="checkbox" lay-skin="primary"></td>
         </tr>
     </table>
+
+    <span>{{htmlContent.length}}</span>
+    <div id="content" class="col-sm-offset-2" contenteditable="true" @keyup="inputDiv" @input="htmlContent=$event.target.innerHTML" style="width: 300px;height: 300px" v-html="htmlContent">
+
+    </div>
+
+    <form name="example" method="post" action="/sumitEditor">
+        <div class="layui-row" v-for="student in students">
+            {{student.name.length}}
+            <textarea  class="example" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;" v-model="student.name"></textarea>
+        </div>
+        <br />
+    </form>
 </div>
 </body>
 
 <script>
+    var vue;
     $(function () {
         var form1 = undefined;
         layui.use('form', function(){
@@ -70,9 +93,14 @@
                 student: {
                     name: 'dd',
                     age: 0
-                }
+                },
+                htmlContent: "99999"
             },
             methods: {
+                inputDiv() {
+                    set_focus()
+                  console.info(this.htmlContent)
+                },
                 del: function (index) {
                     this.students.splice(index, 1);
                 },
@@ -84,6 +112,40 @@
                 }
             }
         })
+        vue = app;
+    });
+
+    function set_focus()
+    {
+        el=document.getElementById('content');
+        //el=el[0];  //jquery 对象转dom对象
+        el.focus();
+        if($.support.msie)
+        {
+            var range = document.selection.createRange();
+            this.last = range;
+            range.moveToElementText(el);
+            range.select();
+            document.selection.empty(); //取消选中
+        }
+        else
+        {
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }}
+
+    KindEditor.ready(function(K) {
+        window.editor = K.create('.example', {
+            items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic'],
+            afterChange: function () {
+                console.info(this)
+                vue.students[0].name = this.html();
+            }
+        });
     });
 </script>
 
