@@ -23,3 +23,8 @@ logging:
 
 log:
   path: guns-logs
+
+jwt:
+  public-key-path: D:/key/public_key.rsa
+  pricate-key-path: D:/key/private_key.rsa
+  secret: m45.&%$dfhtwropmb.#@rtb
