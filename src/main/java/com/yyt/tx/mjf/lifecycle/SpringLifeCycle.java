@@ -1,14 +1,12 @@
 package com.yyt.tx.mjf.lifecycle;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * <p>
@@ -20,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @Description:
  */
 @Component
-public class SpringLifeCycle implements BeanFactoryAware, BeanNameAware, ApplicationContextAware, InitializingBean, BeanPostProcessor {
+public class SpringLifeCycle implements BeanFactoryAware, BeanNameAware, ApplicationContextAware, InitializingBean{
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         System.out.println("设置bean工厂");
@@ -41,16 +39,9 @@ public class SpringLifeCycle implements BeanFactoryAware, BeanNameAware, Applica
         System.out.println("设置setApplicationContext");
     }
 
-    @Override
-    public  Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("初始化之前后置处理");
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("初始化之后的后置处理");
-        return bean;
+    @PostConstruct
+    public void iiiii() {
+        System.out.println("iiiiiiiiii");
     }
 
     /**
