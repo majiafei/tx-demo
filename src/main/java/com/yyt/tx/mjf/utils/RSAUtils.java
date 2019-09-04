@@ -67,4 +67,29 @@ public class RSAUtils {
         return Files.readAllBytes(new File(filePath).toPath());
     }
 
+    public static PublicKey generatePublicKey(String secret) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        SecureRandom secureRandom = new SecureRandom(secret.getBytes());
+        keyPairGenerator.initialize(1024, secureRandom);
+        KeyPair keyPair = keyPairGenerator.genKeyPair();
+        byte[] publicKey = keyPair.getPublic().getEncoded();
+
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
+        KeyFactory rsa = KeyFactory.getInstance("RSA");
+        return rsa.generatePublic(keySpec);
+    }
+
+    public static PrivateKey generatePrivateKey(String secret) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        SecureRandom secureRandom = new SecureRandom(secret.getBytes());
+        keyPairGenerator.initialize(1024, secureRandom);
+        KeyPair keyPair = keyPairGenerator.genKeyPair();
+
+        // 获取秘钥
+        byte[] privateKey = keyPair.getPrivate().getEncoded();
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKey);
+        KeyFactory factory = KeyFactory.getInstance("RSA");
+        return factory.generatePrivate(spec);
+    }
+
 }
