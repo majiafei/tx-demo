@@ -137,6 +137,9 @@ $(function () {
                         deleteKindEditor(currentSiteProductInfo.productInfo.siteId);
                     });
                 }
+
+                // 刪除sku站点账号标题
+                deleteSkuSiteAccountTitle(siteId, accountId);
             }
 
             vueObj.$nextTick(function () {
@@ -167,6 +170,9 @@ $(function () {
             if (checked) {
                 var sku = {skuId: skuId, skuName: skuName};
                 vueObj.checkedSkuList.push(sku);
+
+                // 填充title
+                fillSkuSiteAccountTitleWhenSelectSku(currentSku);
 
                 // 如果刊登信息为空，构造一下
                 if (amazonUploadProductInfo.length == 0) {
@@ -516,4 +522,64 @@ function renderTab() {
             firstItem.addClass('layui-show')
         }
     });
+}
+
+// 不选账号的时候，删除标题
+function deleteSkuSiteAccountTitle(siteId, accountId) {
+    var skuSiteAccountTitleList = amazonProductObj.vueObj.skuSiteAccountTitleList;
+
+    for (var i = 0; i < skuSiteAccountTitleList.length; i++) {
+        var sku = skuSiteAccountTitleList[i];
+        var siteAccountList = sku.siteAccountList;
+        for (var j = 0; j < siteAccountList.length; j++) {
+            if (siteAccountList[j].siteId == siteId) {
+                var accountList = siteAccountList[j].accountList;
+                for (var m = 0; m < accountList.length; m++) {
+                    if (accountList[m].accountId == accountId) {
+                        accountList.splice(m, 1);
+                        break;
+                    }
+                }
+
+                if (accountList.length == 0) {
+                    siteAccountList.splice(j, 1);
+                }
+                break;
+            }
+        }
+        amazonProductObj.vueObj.$set(amazonProductObj.vueObj.skuSiteAccountTitleList, i, sku);
+    }
+}
+
+function fillSkuSiteAccountTitleWhenSelectSku(currentSku) {
+    var skuSiteAccountTitleList = amazonProductObj.vueObj.skuSiteAccountTitleList;
+    var isExistSku = false;
+    for (var i = 0; i < skuSiteAccountTitleList.length; i++) {
+        if (skuSiteAccountTitleList[i].skuId == currentSku.skuId) {
+            isExistSku = true;
+        }
+    }
+    var sku = {};
+    if (!isExistSku) {
+        Object.assign(sku, currentSku);
+        sku.siteAccountList = [];
+        skuSiteAccountTitleList.push(sku);
+    }
+
+    var amazonAllSiteUploadAccountList = amazonProductObj.vueObj.amazonAllSiteUploadAccountList;
+    for (var i = 0; i < amazonAllSiteUploadAccountList.length; i++) {
+        var site = {siteId: amazonAllSiteUploadAccountList[i].siteId, siteName: amazonAllSiteUploadAccountList[i].siteName, languageId: amazonAllSiteUploadAccountList[i].languageId};
+        site.accountList = [];
+        var accountList = amazonAllSiteUploadAccountList[i].accountList;
+        for (var j = 0; j < accountList.length; j++) {
+            // TODO checked
+            if (accountList[j].checked) {
+                var account = {accountId: accountList[j].accountId, accountName: accountList[j].accountName};
+                site.accountList.push(account);
+            }
+        }
+        if (site.accountList.length > 0) {
+            sku.siteAccountList.push(site);
+        }
+    }
 }
