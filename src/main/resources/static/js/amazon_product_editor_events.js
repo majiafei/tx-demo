@@ -29,7 +29,8 @@ $(function () {
            /* skuSiteAccountTitleList: [{skuId: 1, skuName: 'BI01124A1', siteAccountList: [{siteId: 0, siteName: 'US', accountList: [{accountId: 1, accountName: 'g06-a1-us'},{accountId: 2, accountName: 'g06-a1-us'}]}]},
                                       {skuId: 2, skuName: 'BI01124A2', siteAccountList: [{siteId: 0, siteName: 'US', accountList: [{accountId: 1, accountName: 'g06-a1-us'},{accountId: 2, accountName: 'g06-a1-us'}]}]}
                                      ]*/
-            skuSiteAccountTitleList: []
+            skuSiteAccountTitleList: [],
+            keySellPointDescForSiteList: [{siteId: 1, siteName: 'US', skuList: [{skuId: 1, skuName: 'BI01124A1', keywords:'', sellPointList:[{sellPoint:''},{sellPoint:''},{sellPoint:''},{sellPoint:''}]}]}]
         },
         methods: {
             deleteSku(siteId, accountId, skuName) {
@@ -120,6 +121,22 @@ $(function () {
                 // 组合标题的结构
                 fillSkuSiteAccountTitle(currentSite, account);
 
+                // 填充sku信息
+                fillSkuInfo(account);
+                if (!currentSiteProductInfo) {
+                    var productInfo = {siteId: siteId, siteName: siteName, languageId: currentSite.languageId};
+                    var length = vueObj.amazonUploadProductInfo.length;
+                    var currentSiteProductInfo = {productInfo:productInfo, index: length};
+
+                    productInfo.accountList = [];
+                    productInfoMap[siteId] = currentSiteProductInfo;
+                    productInfo.accountList.push(account);
+                    // 填充卖点，关键词和描述 TODO 还有sku信息
+                    vueObj.amazonUploadProductInfo.push(productInfo);
+                } else {
+                    currentSiteProductInfo.productInfo.accountList.push(account);
+                }
+
             } else { // 未选中账号
                 if (currentSiteProductInfo) {
                     var accountList = currentSiteProductInfo.productInfo.accountList;
@@ -146,6 +163,7 @@ $(function () {
                 initeKindEdtor()
             });
 
+            renderTab();
         });
         /*********************************************账号选择Ending***************************************************/
 
@@ -231,6 +249,41 @@ $(function () {
 
     $("#saveUploadInfo").click(function () {
         console.info(vueObj.skuSiteAccountTitleList)
+    });
+
+    $("#fenpei").click(function () {
+        var skuSiteAccountTitleList = amazonProductObj.vueObj.skuSiteAccountTitleList;
+        var accountListByLanguageIdList = [];
+        for (var i = 0; i < skuSiteAccountTitleList.length; i++) {
+            var siteAccountList = skuSiteAccountTitleList[i].siteAccountList;
+            var accountListByLanguageId = {};
+            for (var j = 0; j < siteAccountList.length; j++) {
+                var accountList = siteAccountList[j].accountList;
+                var languageId = siteAccountList[j].languageId;
+                if (!accountListByLanguageId[languageId]) {
+                    accountListByLanguageId[languageId] = [];
+                }
+                for (var m = 0; m < accountList.length; m++) {
+                    accountListByLanguageId[languageId].push(accountList[m]);
+                }
+            }
+            accountListByLanguageIdList.push(accountListByLanguageId);
+        }
+
+        for (var i = 0; i < accountListByLanguageIdList.length; i++) {
+            var accountListByLanguageId = accountListByLanguageIdList[i];
+            for (var key in accountListByLanguageId) {
+                var accountList = accountListByLanguageId[key];
+                for (var j = 0 ; j < accountList.length; j++) {
+                    accountList[j].title = 'majiafe' + j;
+                }
+            }
+        }
+
+        // 重新設置
+        for (var i = 0; i < skuSiteAccountTitleList.length; i++) {
+            vueObj.$set(skuSiteAccountTitleList, i, skuSiteAccountTitleList[i]);
+        }
     });
 
     initeKindEdtor();
@@ -465,7 +518,7 @@ function fillSkuSiteAccountTitle(siteObj, accountObj) {
         }
 
         for (var i = 0; i < skuSiteAccountTitleList.length; i++) {
-            var site = {siteId: siteObj.siteId, siteName: siteObj.siteName};
+            var site = {siteId: siteObj.siteId, siteName: siteObj.siteName, languageId: siteObj.languageId};
             var account = {accountId: accountObj.accountId, accountName: accountObj.accountName};
 
             var sku = skuSiteAccountTitleList[i];
@@ -511,16 +564,15 @@ function fillSkuSiteAccountTitle(siteObj, accountObj) {
 
 function renderTab() {
     amazonProductObj.vueObj.$nextTick(function () {
-        var lis = $(".layui-tab-title").find('li');
-        if (lis.length > 0) {
-            var firstLi = $(lis[0]);
-            firstLi.addClass('layui-this');
-        }
-
-        var firstItem = $(".layui-tab-content").find('.layui-tab-item').first();
-        if (firstItem && firstItem.length > 0) {
-            firstItem.addClass('layui-show')
-        }
+        var tabTitles = $(".layui-tab-title");
+        console.info(tabTitles)
+        tabTitles.each(function (i, e) {
+           $(e).find('li').first().addClass('layui-this');
+        });
+        var tabContents = $(".layui-tab-content");
+        tabContents.each(function (i, e) {
+            $(e).find('.layui-tab-item').first().addClass('layui-show');
+        });
     });
 }
 
