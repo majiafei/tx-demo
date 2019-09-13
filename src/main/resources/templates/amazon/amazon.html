@@ -36,9 +36,9 @@
         .rch-border{
             border:2px solid #84a0c4;
         }
-/*        .layui-this{
+        .layui-this{
             color: red !important;
-        }*/
+        }
         .layui-input{
             height: 26px;
         }
@@ -141,10 +141,6 @@
         .ebayAccountTable tr:hover{
             background-color: #a6ddff;
         }
-        .rch-red:after {
-            color: red;
-            content: '';
-        }
         .rch-bolder{
             font-weight: bolder;
         }
@@ -205,8 +201,11 @@
                         </div>
                         <div class="layui-row rch-margin-top-1">
                             <div class="layui-row">
-                                <div class="layui-col-sm8 text-left">
+                                <div class="layui-col-sm2 text-left">
                                     <span>标题:</span>
+                                </div>
+                                <div class="layui-col-sm4 text-left">
+                                    <button id="fenpei">分配:</button>
                                 </div>
                             </div>
                             <div class="layui-tab">
@@ -241,6 +240,166 @@
                                                         </td>
                                                     </tr>
                                                 </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row rch-margin-top-1">
+                            <div class="layui-row">
+                                <div class="layui-col-sm2 text-left">
+                                    <span class="rch-bolder">各站点分类和属性:</span>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-tab layui-tab-card">
+                                    <ul class="layui-tab-title">
+                                        <li v-for="(siteCategory, i) in amazonCategory.siteCategoryList" :class="i == 0 ? 'layui-this' : ''">{{siteCategory.siteName}}</li>
+                                    </ul>
+                                    <div class="layui-tab-content" style="height: 100px;">
+                                        <div  v-for="(siteCategory, i) in amazonCategory.siteCategoryList" :class="i == 0 ? 'layui-tab-item layui-show' : 'layui-tab-item'">
+                                            <div class="layui-row">
+                                                <div class="layui-col-sm1"><span>{{siteCategory.siteName}}</span></div>
+                                                <div class="layui-col-sm6"><input class="layui-input" v-model="siteCategory.categoryName"></div>
+                                            </div>
+                                            <div class="layui-row rch-margin-top-1">
+                                                <div class="layui-row">
+                                                    <div class="layui-col-sm1">属性名称：</div>
+                                                    <div class="layui-col-sm4"><select></select></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row rch-margin-top-1">
+                            <div class="layui-row">
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <td style="width: 5%">站点</td>
+                                        <td style="width: 6%">账号</td>
+                                        <td style="width: 10%">SKU</td>
+                                        <td style="width: 8%">属性</td>
+                                        <td style="width: 8%">售价</td>
+                                        <td style="width: 8%">底价</td>
+                                        <td style="width: 8%">利润率</td>
+                                        <td style="width: 10%">物流渠道</td>
+                                    </tr>
+                                    </thead>
+                                    <tr v-for="site in amazonUploadProductInfo">
+                                        <td>{{site.siteName}}</td>
+                                        <td style="padding: 0">
+                                            <div v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;">
+                                                <div v-for="(sku, i) in account.uploadSkuList" class="layui-row" style="height: 20px;margin-bottom: 10px">
+                                                    <span v-if="i == 0">{{account.accountName}}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 0">
+                                            <div v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;">
+                                                <div v-for="sku in account.uploadSkuList" class="layui-row" style="height: 20px;margin-bottom: 10px">
+                                                    <div class="layui-col-sm9">
+                                                        <input v-if="sku.skuId != 0" readonly v-model="sku.skuName" class="layui-input ">
+                                                        <input v-else  v-model="sku.skuName" class="layui-input ">
+                                                    </div>
+                                                    <div class="layui-col-sm3"><button class="rch-btn" @click="deleteSku(site.siteId, account.accountId, sku.skuName)"><i class="layui-icon layui-icon-delete"></i> 删除</button></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>属性</td>
+                                        <td style="padding: 0">
+                                            <div v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;">
+                                                <div v-for="sku in account.uploadSkuList" class="layui-row" style="height: 20px;margin-bottom: 10px">
+                                                    <div class="layui-col-sm9 layui-col-sm-offset1"><input v-model="sku.salePrice" class="layui-input "></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 0">
+                                            <div v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;">
+                                                <div v-for="sku in account.uploadSkuList" class="layui-row" style="height: 20px;margin-bottom: 10px">
+                                                    <div class="layui-col-sm9 layui-col-sm-offset1"><input v-model="sku.lowestPrice" class="layui-input "></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 0">
+                                            <div v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;">
+                                                <div v-for="sku in account.uploadSkuList" class="layui-row" style="height: 20px;margin-bottom: 10px">
+                                                    <div class="layui-col-sm9 layui-col-sm-offset1"><input v-model="sku.profitRate" class="layui-input "></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 0">
+                                            <div v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;">
+                                                <div v-for="sku in account.uploadSkuList" class="layui-row" style="height: 20px;margin-bottom: 10px">
+                                                    <div class="layui-col-sm9 layui-col-sm-offset1">
+                                                        <span>{{sku.logisticsChannelName}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="layui-row rch-margin-top-1">
+                            <div class="layui-row">
+                                <div class="layui-tab layui-tab-card">
+                                    <ul class="layui-tab-title">
+                                        <li v-for="(site, i) in keySellPointDescForSiteList" :class="i == 0 ? 'layui-this' : ''">{{site.siteName}}</li>
+                                    </ul>
+                                    <div class="layui-tab-content">
+                                        <div v-for="(site, i) in keySellPointDescForSiteList" :class="i == 0 ? 'layui-tab-item layui-show' : 'layui-tab-item'">
+                                            <div class="layui-row">
+                                                <div class="layui-row">
+                                                    <div class="layui-col-sm4">
+                                                        <span>关键词(Amazon平台需求)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row" v-for="sku in site.skuList">
+                                                    <div class="layui-col-sm1 text-center">{{sku.skuName}}:</div>
+                                                    <div class="layui-col-sm10">
+                                                        <textarea maxlength="250" rows="5" cols="150"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-row" v-for="sku in site.skuList">
+                                                <div class="layui-row" style="display: flex">
+                                                    <div class="layui-col-sm1 text-center" style="align-self: center">
+                                                        <span>{{sku.skuName}}</span>
+                                                    </div>
+                                                    <div class="layui-col-sm10" >
+                                                        <div class="layui-row" v-for="sellPoint in sku.sellPointList">
+                                                            <div class="layui-col-sm12">
+                                                                <input v-model="sellPoint.sellPoint" class="layui-input">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-row">
+                                                <div class="layui-row rch-margin-top-1">
+                                                    <div class="layui-row">
+                                                        <div class="layui-row">
+                                                            <div class="layui-col-sm8 text-left">Description:</div>
+                                                        </div>
+                                                        <div class="layui-row">
+                                                            <div class="layui-col-sm8">
+                                                                <textarea :id="'descriptionForSite'+site.siteId" style="width: 700px; height: 172px; "  v-model="site.description" cols="100" rows="10"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-row">
+                                            <div class="layui-col-sm8 text-right">
+                                                <button class="rch-btn"><i class="fa fa-save"></i>保存</button>
+                                                <button class="rch-btn" style="background-color: red"><i class="layui-icon layui-icon-upload"></i>刊登</button>
                                             </div>
                                         </div>
                                     </div>
