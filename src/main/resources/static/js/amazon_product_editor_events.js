@@ -276,6 +276,9 @@ $(function () {
                 // 删除每个账号的sku信息
                 deleteAccountSku(skuId);
 
+                // 删除该sku的关键词，卖点和描述
+                deleteSkuKeySellPointDesc(skuId);
+
                 // 一个sku没有选中，删除站点信息
                 if (vueObj.checkedSkuList.length == 0) {
                     vueObj.amazonUploadProductInfo = [];
@@ -759,6 +762,19 @@ function deleteAccountSku(skuId) {
                     uploadSkuList.splice(m, 1);
                     break;
                 }
+            }
+        }
+    }
+}
+
+function deleteSkuKeySellPointDesc(skuId){
+    var keySellPointDescForSiteList = amazonProductObj.vueObj.keySellPointDescForSiteList;
+    for (var i = 0; i < keySellPointDescForSiteList.length; i++) {
+        var skuList = keySellPointDescForSiteList[i].skuList;
+        for (var j = 0; j < skuList.length; j++) {
+            if (skuList[j].skuId == skuId) {
+                skuList.splice(j, 1);
+                break;
             }
         }
     }
