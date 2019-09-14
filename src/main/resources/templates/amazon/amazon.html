@@ -210,8 +210,7 @@
                             </div>
                             <div class="layui-tab">
                                 <ul class="layui-tab-title">
-                                    <li v-for="(skuSiteAccountTitle, i) in skuSiteAccountTitleList" v-if="i == 0" class="rch-red layui-this" >{{skuSiteAccountTitle.skuName}}</li>
-                                    <li v-else>{{skuSiteAccountTitle.skuName}}dd</li>
+                                    <li v-for="(skuSiteAccountTitle, i) in skuSiteAccountTitleList"  :class="i == 0 ? 'layui-this' : ''" >{{skuSiteAccountTitle.skuName}}</li>
                                 </ul>
                                 <div class="layui-tab-content">
                                     <div v-for="(skuSiteAccountTitle, i) in skuSiteAccountTitleList" :class="i == 0 ? 'layui-tab-item layui-show' : 'layui-tab-item'">
