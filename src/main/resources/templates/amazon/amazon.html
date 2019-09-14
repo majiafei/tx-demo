@@ -163,12 +163,12 @@
                             </div>
                         </div>
                         <div class="layui-row rch-margin-top-1">
-                            <div class="layui-col-sm1 text-left"><span>主目录</span></div>
+                            <div class="layui-col-sm1 text-left"><span class="rch-bolder">主目录</span></div>
                             <div class="layui-col-sm6"><input readonly class="layui-input" v-model="amazonCategory.mainCategoryName"></div>
                         </div>
                         <!--sku信息-->
                         <div class="rch-margin-top-1 layui-row">
-                            <div class="layui-col-sm1 text-left"><span>SKU:</span></div>
+                            <div class="layui-col-sm1 text-left"><span class="rch-bolder">SKU:</span></div>
                             <div class="layui-col-sm1" v-for="sku in spu.skuList">
                                 <input checked :sku-id="sku.skuId" lay-filter="selectSku" lay-skin="primary" type="checkbox" :title="sku.skuName">
                             </div>
@@ -208,40 +208,47 @@
                                     <button id="fenpei">分配:</button>
                                 </div>
                             </div>
-                            <div class="layui-tab">
-                                <ul class="layui-tab-title">
-                                    <li v-for="(skuSiteAccountTitle, i) in skuSiteAccountTitleList"  :class="i == 0 ? 'layui-this' : ''" >{{skuSiteAccountTitle.skuName}}</li>
-                                </ul>
-                                <div class="layui-tab-content">
-                                    <div v-for="(skuSiteAccountTitle, i) in skuSiteAccountTitleList" :class="i == 0 ? 'layui-tab-item layui-show' : 'layui-tab-item'">
-                                        <div class="layui-row">
+                            <div class="layui-row" v-if="skuSiteAccountTitleList.length > 0">
+                                <div class="layui-tab">
+                                    <ul class="layui-tab-title">
+                                        <li v-for="(skuSiteAccountTitle, i) in skuSiteAccountTitleList"  :class="i == 0 ? 'layui-this' : ''" >{{skuSiteAccountTitle.skuName}}</li>
+                                    </ul>
+                                    <div class="layui-tab-content">
+                                        <div v-for="(skuSiteAccountTitle, i) in skuSiteAccountTitleList" :class="i == 0 ? 'layui-tab-item layui-show' : 'layui-tab-item'">
                                             <div class="layui-row">
-                                                <div class="layui-col-sm1 text-left">
-                                                    <span class="rch-bolder">标题:</span>
+                                                <div class="layui-row">
+                                                    <div class="layui-col-sm1 text-left">
+                                                        <span class="rch-bolder">标题:</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="layui-row">
-                                                <table class="layui-table">
-                                                    <thead>
-                                                    <tr>
-                                                        <td style="width: 10%" class="text-center">站点</td>
-                                                        <td style="width: 10%" class="text-center">账号</td>
-                                                        <td style="width: 80%" class="text-center">标题</td>
-                                                    </tr>
-                                                    </thead>
-                                                    <tr v-for="site in skuSiteAccountTitle.siteAccountList">
-                                                        <td>{{site.siteName}}</td>
-                                                        <td style="padding: 0px">
-                                                            <div v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;height: 30px;"><span>{{account.accountName}}</span></div>
-                                                        </td>
-                                                        <td style="padding: 0px">
-                                                            <div  v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;height: 30px;"><input class="layui-input" v-model="account.title"></div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                                <div class="layui-row">
+                                                    <table class="layui-table">
+                                                        <thead>
+                                                        <tr>
+                                                            <td style="width: 10%" class="text-center">站点</td>
+                                                            <td style="width: 10%" class="text-center">账号</td>
+                                                            <td style="width: 80%" class="text-center">标题</td>
+                                                        </tr>
+                                                        </thead>
+                                                        <tr v-for="site in skuSiteAccountTitle.siteAccountList">
+                                                            <td>{{site.siteName}}</td>
+                                                            <td style="padding: 0px">
+                                                                <div v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;height: 30px;"><span>{{account.accountName}}</span></div>
+                                                            </td>
+                                                            <td style="padding: 0px">
+                                                                <div  v-for="account in site.accountList" class="layui-row" style="border-bottom: 2px blueviolet solid;height: 30px;"><input class="layui-input" v-model="account.title"></div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div v-else class="layui-row">
+                                <div class="layui-col-sm4">
+                                    <span style="color: red">请选择账号或者sku</span>
                                 </div>
                             </div>
                         </div>
@@ -252,25 +259,32 @@
                                     <span class="rch-bolder">各站点分类和属性:</span>
                                 </div>
                             </div>
-                            <div class="layui-row" id="categoryAttr">
-                                <div class="layui-tab layui-tab-card">
-                                    <ul class="layui-tab-title">
-                                        <li v-for="(siteCategory, i) in amazonCategory.siteCategoryList" :class="i == 0 ? 'layui-this' : ''">{{siteCategory.siteName}}</li>
-                                    </ul>
-                                    <div class="layui-tab-content" style="height: 100px;">
-                                        <div  v-for="(siteCategory, i) in amazonCategory.siteCategoryList" :class="i == 0 ? 'layui-tab-item layui-show' : 'layui-tab-item'">
-                                            <div class="layui-row">
-                                                <div class="layui-col-sm1"><span>{{siteCategory.siteName}}</span></div>
-                                                <div class="layui-col-sm6"><input class="layui-input" v-model="siteCategory.categoryName"></div>
-                                            </div>
-                                            <div class="layui-row rch-margin-top-1">
+                            <div class="layui-row" v-if="amazonCategory.siteCategoryList && amazonCategory.siteCategoryList.length > 0">
+                                <div class="layui-row" id="categoryAttr">
+                                    <div class="layui-tab layui-tab-card">
+                                        <ul class="layui-tab-title">
+                                            <li v-for="(siteCategory, i) in amazonCategory.siteCategoryList" :class="i == 0 ? 'layui-this' : ''">{{siteCategory.siteName}}</li>
+                                        </ul>
+                                        <div class="layui-tab-content" style="height: 100px;">
+                                            <div  v-for="(siteCategory, i) in amazonCategory.siteCategoryList" :class="i == 0 ? 'layui-tab-item layui-show' : 'layui-tab-item'">
                                                 <div class="layui-row">
-                                                    <div class="layui-col-sm1">属性名称：</div>
-                                                    <div class="layui-col-sm4"><select></select></div>
+                                                    <div class="layui-col-sm1"><span>{{siteCategory.siteName}}</span></div>
+                                                    <div class="layui-col-sm6"><input class="layui-input" v-model="siteCategory.categoryName"></div>
+                                                </div>
+                                                <div class="layui-row rch-margin-top-1">
+                                                    <div class="layui-row">
+                                                        <div class="layui-col-sm1">属性名称：</div>
+                                                        <div class="layui-col-sm4"><select></select></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="layui-row" v-else>
+                                <div class="layui-col-sm6">
+                                    <span style="color: red">请选择账号才会有类目属性信息</span>
                                 </div>
                             </div>
                         </div>
@@ -362,19 +376,26 @@
                                                 <div class="layui-row" v-for="sku in site.skuList" style="display: flex;">
                                                     <div class="layui-col-sm1 text-center" style="align-self: center">{{sku.skuName}}:</div>
                                                     <div class="layui-col-sm10">
-                                                        <textarea maxlength="250" rows="5" cols="150"></textarea>
+                                                        <textarea v-model="sku.keywords" maxlength="250" rows="5" cols="150"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="layui-row rch-margin-top-1" v-for="sku in site.skuList">
-                                                <div class="layui-row" style="display: flex">
-                                                    <div class="layui-col-sm1 text-center" style="align-self: center">
-                                                        <span>{{sku.skuName}}</span>
+                                            <div class="layui-row rch-margin-top-1">
+                                                <div class="layui-row ">
+                                                    <div class="layui-col-sm4">
+                                                        <span>卖点(Amazon平台需求)</span>
                                                     </div>
-                                                    <div class="layui-col-sm10" >
-                                                        <div class="layui-row" v-for="sellPoint in sku.sellPointList">
-                                                            <div class="layui-col-sm12">
-                                                                <input v-model="sellPoint.sellPoint" class="layui-input">
+                                                </div>
+                                                <div class="layui-row" v-for="sku in site.skuList">
+                                                    <div class="layui-row" style="display: flex">
+                                                        <div class="layui-col-sm1 text-center" style="align-self: center">
+                                                            <span>{{sku.skuName}}</span>
+                                                        </div>
+                                                        <div class="layui-col-sm10" >
+                                                            <div class="layui-row" v-for="sellPoint in sku.sellPointList">
+                                                                <div class="layui-col-sm12">
+                                                                    <input v-model="sellPoint.sellPoint" class="layui-input">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
