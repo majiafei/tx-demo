@@ -199,7 +199,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="layui-row rch-margin-top-1">
+                        <div class="layui-row rch-margin-top-1" id="skuSiteTitle">
                             <div class="layui-row">
                                 <div class="layui-col-sm2 text-left">
                                     <span>标题:</span>
@@ -253,7 +253,7 @@
                                     <span class="rch-bolder">各站点分类和属性:</span>
                                 </div>
                             </div>
-                            <div class="layui-row">
+                            <div class="layui-row" id="categoryAttr">
                                 <div class="layui-tab layui-tab-card">
                                     <ul class="layui-tab-title">
                                         <li v-for="(siteCategory, i) in amazonCategory.siteCategoryList" :class="i == 0 ? 'layui-this' : ''">{{siteCategory.siteName}}</li>
@@ -346,7 +346,7 @@
                             </div>
                         </div>
 
-                        <div class="layui-row rch-margin-top-1">
+                        <div id="keySellPointDescDiv" class="layui-row rch-margin-top-1">
                             <div class="layui-row">
                                 <div class="layui-tab layui-tab-card">
                                     <ul class="layui-tab-title">
@@ -360,14 +360,14 @@
                                                         <span>关键词(Amazon平台需求)</span>
                                                     </div>
                                                 </div>
-                                                <div class="layui-row" v-for="sku in site.skuList">
-                                                    <div class="layui-col-sm1 text-center">{{sku.skuName}}:</div>
+                                                <div class="layui-row" v-for="sku in site.skuList" style="display: flex;">
+                                                    <div class="layui-col-sm1 text-center" style="align-self: center">{{sku.skuName}}:</div>
                                                     <div class="layui-col-sm10">
                                                         <textarea maxlength="250" rows="5" cols="150"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="layui-row" v-for="sku in site.skuList">
+                                            <div class="layui-row rch-margin-top-1" v-for="sku in site.skuList">
                                                 <div class="layui-row" style="display: flex">
                                                     <div class="layui-col-sm1 text-center" style="align-self: center">
                                                         <span>{{sku.skuName}}</span>
