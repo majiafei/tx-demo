@@ -14,10 +14,11 @@ $(function () {
     var vueObj = new Vue({
         el: '#amazonUploadDiv',
         created() {
+            this.getSpuCategory();
         },
         data: {
-            amazonCategory: {mainCategoryId: 1, platformId: 2, mainCategoryName: '亚马逊主目录', siteCategoryList: [{siteId: 0, siteName: 'US', categoryId: 0, categoryName: ''}, {siteId: 2, siteName: 'CA', categoryId: 0, categoryName: 'CA'}]},
-            amazonCategoryCopy: {},
+            amazonCategoryCopy: {mainCategoryId: 1, platformId: 2, mainCategoryName: '亚马逊主目录', siteCategoryList: [{siteId: 0, siteName: 'US', categoryId: 0, categoryName: ''}, {siteId: 2, siteName: 'CA', categoryId: 0, categoryName: 'CA'}]},
+            amazonCategory: {},
             spu: {skuList: [{skuId: 1, skuName: 'BI01124A1'}, {skuId: 2, skuName: 'BI01124A2'}]},
             amazonAllSiteUploadAccountList: [{siteId: 0, siteName: 'US', languageId:1, accountList: [{accountId: 1, accountName: 'g06-a1-us'}, {accountId: 2, accountName: 'g06-a1-us'}]},
                                              {siteId: 2, siteName: 'CA', languageId:1, accountList: [{accountId: 1, accountName: 'g06-a1-ca'}]}],
@@ -30,7 +31,8 @@ $(function () {
                                       {skuId: 2, skuName: 'BI01124A2', siteAccountList: [{siteId: 0, siteName: 'US', accountList: [{accountId: 1, accountName: 'g06-a1-us'},{accountId: 2, accountName: 'g06-a1-us'}]}]}
                                      ]*/
             skuSiteAccountTitleList: [],
-            keySellPointDescForSiteList: [{siteId: 1, siteName: 'US', skuList: [{skuId: 1, skuName: 'BI01124A1', keywords:'', sellPointList:[{sellPoint:''},{sellPoint:''},{sellPoint:''},{sellPoint:''}]}]}]
+            //keySellPointDescForSiteList: [{siteId: 1, siteName: 'US', skuList: [{skuId: 1, skuName: 'BI01124A1', keywords:'', sellPointList:[{sellPoint:''},{sellPoint:''},{sellPoint:''},{sellPoint:''}]}]}]
+            keySellPointDescForSiteList:[]
         },
         methods: {
             deleteSku(siteId, accountId, skuName) {
@@ -74,6 +76,9 @@ $(function () {
                     });
                 }
 
+            },
+            getSpuCategory() {
+
             }
         }
     });
@@ -101,10 +106,6 @@ $(function () {
             var currentSite = setUploadAccountCheckedState(checked, siteId, accountId);
 
 
-            if (vueObj.checkedSkuList.length == 0) {
-                return;
-            }
-
             // 将广告信息处理成key-value的形式
             var productInfoMap = {};
             for (var i = 0; i < vueObj.amazonUploadProductInfo.length; i++) {
@@ -116,6 +117,10 @@ $(function () {
             // 目前刊登信息中当前选中账号所属站点的记录(可能存在，也可能不存在)
             var currentSiteProductInfo = productInfoMap[siteId];
             if (checked) { // 选中账号
+                if (vueObj.checkedSkuList.length == 0) {
+                    return;
+                }
+
                 var account = {accountId: accountId, accountName: accountName};
 
                 // 组合标题的结构
@@ -137,6 +142,12 @@ $(function () {
                     currentSiteProductInfo.productInfo.accountList.push(account);
                 }
 
+                // 分类
+                addCategoryWhenSelectAccount(siteId);
+
+                // 关键词卖点描述
+                addKeySellPointDesc(currentSite);
+
             } else { // 未选中账号
                 if (currentSiteProductInfo) {
                     var accountList = currentSiteProductInfo.productInfo.accountList;
@@ -148,11 +159,25 @@ $(function () {
                     }
                     if (accountList.length == 0) {
                         vueObj.amazonUploadProductInfo.splice(currentSiteProductInfo.index, 1);
+                        // 删除目录
+                        deleteCategoryWhenNoSeletetAccount(siteId);
+
+                        // 删除关键词，卖点
+                        deleteKeySellPointDesc(siteId);
+
+                        renderTab('categoryAttr');
+                        renderTab('keySellPointDescDiv')
                     }
 
                     vueObj.$nextTick(function () {
                         deleteKindEditor(currentSiteProductInfo.productInfo.siteId);
                     });
+                }else { // 此时可能没有sku被选中 TODO 需要从刊登账号列表中查询被选中的账号
+                    // 删除目录
+                    deleteCategoryWhenNoSeletetAccount(siteId);
+
+                    // 删除关键词，卖点
+                    deleteKeySellPointDesc(siteId);
                 }
 
                 // 刪除sku站点账号标题
@@ -163,7 +188,7 @@ $(function () {
                 initeKindEdtor()
             });
 
-            renderTab();
+            //renderTab();
         });
         /*********************************************账号选择Ending***************************************************/
 
@@ -239,7 +264,7 @@ $(function () {
                 }
             }
 
-            renderTab();
+            renderTab('skuSiteTitle');
             vueObj.$nextTick(function () {
                 initeKindEdtor();
             });
@@ -562,14 +587,13 @@ function fillSkuSiteAccountTitle(siteObj, accountObj) {
     }
 }
 
-function renderTab() {
+function renderTab(id) {
     amazonProductObj.vueObj.$nextTick(function () {
-        var tabTitles = $(".layui-tab-title");
-        console.info(tabTitles)
+        var tabTitles = $("#" + id).find(".layui-tab-title");
         tabTitles.each(function (i, e) {
            $(e).find('li').first().addClass('layui-this');
         });
-        var tabContents = $(".layui-tab-content");
+        var tabContents = $("#" + id).find(".layui-tab-content");
         tabContents.each(function (i, e) {
             $(e).find('.layui-tab-item').first().addClass('layui-show');
         });
@@ -632,6 +656,75 @@ function fillSkuSiteAccountTitleWhenSelectSku(currentSku) {
         }
         if (site.accountList.length > 0) {
             sku.siteAccountList.push(site);
+        }
+    }
+}
+
+function addCategoryWhenSelectAccount(siteId) {
+    var amazonCategory = amazonProductObj.vueObj.amazonCategory;
+    var siteCategoryList = amazonCategory.siteCategoryList;
+    if (!siteCategoryList) {
+        amazonCategory.siteCategoryList = [];
+        siteCategoryList = amazonCategory.siteCategoryList;
+    } else {
+        for (var i = 0; i < siteCategoryList.length; i++) {
+            if (siteCategoryList[i].siteId == siteId) {
+                return;
+            }
+        }
+    }
+
+    var amazonCategoryCopy = amazonProductObj.vueObj.amazonCategoryCopy;
+    var siteCategoryListCopy = amazonCategoryCopy.siteCategoryList;
+    for (var i = 0; i < siteCategoryListCopy.length; i++) {
+        if (siteCategoryListCopy[i].siteId == siteId) {
+            siteCategoryList.push(siteCategoryListCopy[i]);
+            break;
+        }
+    }
+}
+
+function deleteCategoryWhenNoSeletetAccount(siteId) {
+    var amazonCategory = amazonProductObj.vueObj.amazonCategory;
+    var siteCategoryList = amazonCategory.siteCategoryList;
+    if (!siteCategoryList) {
+        return;
+    }
+    for (var i = 0; i < siteCategoryList.length; i++) {
+        if (siteCategoryList[i].siteId == siteId) {
+            siteCategoryList.splice(i, 1);
+            break;
+        }
+    }
+}
+
+function addKeySellPointDesc(currentSite) {
+    if (currentSite) {
+        var keySellPointDescForSiteList = amazonProductObj.vueObj.keySellPointDescForSiteList;
+        for (var i = 0; i < keySellPointDescForSiteList.length; i++) {
+            if (keySellPointDescForSiteList[i].siteId == currentSite.siteId) {
+                return;
+            }
+        }
+
+        var site = {siteId: currentSite.siteId, siteName: currentSite.siteName, languageId: currentSite.languageId};
+        site.skuList = [];
+        var checkedSkuList = amazonProductObj.vueObj.checkedSkuList;
+        for (var i =  0; i < checkedSkuList.length; i++) {
+            var sku = {skuId: checkedSkuList[i].skuId, skuName: checkedSkuList[i].skuName, sellPointList: [{sellPoint: ''},{sellPoint: ''}]};
+            site.skuList.push(sku);
+        }
+        console.info(site)
+        keySellPointDescForSiteList.push(site);
+    }
+}
+
+function deleteKeySellPointDesc(siteId) {
+    var keySellPointDescForSiteList = amazonProductObj.vueObj.keySellPointDescForSiteList;
+    for (var i = 0; i < keySellPointDescForSiteList.length; i++) {
+        if (keySellPointDescForSiteList[i].siteId == siteId) {
+            keySellPointDescForSiteList.splice(i, 1)
+            break;
         }
     }
 }
