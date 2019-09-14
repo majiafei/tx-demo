@@ -61,19 +61,20 @@ $(function () {
                 }
 
                 // 将所有的账号设置为不选择
-                if (that.amazonUploadProductInfo.length == 0) {
+/*                if (that.amazonUploadProductInfo.length == 0) {
                     for (var i = 0; i < that.amazonAllSiteUploadAccountList.length; i++) {
                         for (var j = 0; j < that.amazonAllSiteUploadAccountList[i].accountList.length; j++) {
-                            // TODO checked
+                            // TODO checked disabled的不去掉
                             that.amazonAllSiteUploadAccountList[i].accountList[j].checked = false;
                         }
                     }
                     var accountInputs = $("#uploadAccountSelect").find('input');
                     accountInputs.each(function (i, e) {
+                        // TODO disabled的不去掉
                         $(e).prop('checked', false);
                         amazonProductObj.form.render('checkbox');
                     });
-                }
+                }*/
 
             },
             getSpuCategory() {
@@ -497,6 +498,12 @@ function addSkuBtn() {
             uploadSkuList.push(sku);
         }
     }
+
+    // TODO
+/*    var newSku = {skuId: 0, skuName: '新添加的sku'};
+    fillSkuSiteAccountTitleWhenSelectSku(newSku);
+
+    addSkuKeySellPoint(newSku);*/
 }
 
 function fillSkuSiteAccountTitle(siteObj, accountObj) {
