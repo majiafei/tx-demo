@@ -173,11 +173,25 @@ $(function () {
                         deleteKindEditor(currentSiteProductInfo.productInfo.siteId);
                     });
                 }else { // 此时可能没有sku被选中 TODO 需要从刊登账号列表中查询被选中的账号
-                    // 删除目录
-                    deleteCategoryWhenNoSeletetAccount(siteId);
+                    var isHasAccount = false; // 是否还有账号被选中
+                    for (var i = 0; i < vueObj.amazonAllSiteUploadAccountList.length; i++) {
+                        if (vueObj.amazonAllSiteUploadAccountList[i].siteId == siteId) {
+                            var accountList = vueObj.amazonAllSiteUploadAccountList[i].accountList;
+                            for (var j = 0; j < accountList.length; j++) {
+                                if (accountList[j].checked) {
+                                    isHasAccount = true;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    if (!isHasAccount) {
+                        // 删除目录
+                        deleteCategoryWhenNoSeletetAccount(siteId);
 
-                    // 删除关键词，卖点
-                    deleteKeySellPointDesc(siteId);
+                        // 删除关键词，卖点
+                        deleteKeySellPointDesc(siteId);
+                    }
                 }
 
                 // 刪除sku站点账号标题
@@ -258,6 +272,10 @@ $(function () {
                         break;
                     }
                 }
+
+                // 删除每个账号的sku信息
+                deleteAccountSku(skuId);
+
                 // 一个sku没有选中，删除站点信息
                 if (vueObj.checkedSkuList.length == 0) {
                     vueObj.amazonUploadProductInfo = [];
@@ -725,6 +743,23 @@ function deleteKeySellPointDesc(siteId) {
         if (keySellPointDescForSiteList[i].siteId == siteId) {
             keySellPointDescForSiteList.splice(i, 1)
             break;
+        }
+    }
+}
+
+// 不选sku的时候删除每个账号的sku
+function deleteAccountSku(skuId) {
+    var amazonUploadProductInfo = amazonProductObj.vueObj.amazonUploadProductInfo;
+    for (var i = 0; i < amazonUploadProductInfo.length; i++) {
+        var accountList = amazonUploadProductInfo[i].accountList;
+        for (var j = 0; j < accountList.length; j++) {
+            var uploadSkuList = accountList[j].uploadSkuList;
+            for (var m = 0; m < uploadSkuList.length; m++) {
+                if (uploadSkuList[m].skuId == skuId) {
+                    uploadSkuList.splice(m, 1);
+                    break;
+                }
+            }
         }
     }
 }
