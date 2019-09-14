@@ -5,8 +5,7 @@ var amazonProductObj = {
     siteEditor: {},
     kindEditorItems: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
     vueObj: undefined,
-    spuCode: '',
-    platformId: 2
+    spuCode: ''
 }
 $(function () {
     amazonProductObj.spuCode = 'ABC1234';
@@ -259,6 +258,9 @@ $(function () {
                     }
                 }
 
+                // 添加sku关键词卖点
+                addSkuKeySellPoint(currentSku);
+
             } else {
                 for (var i = 0; i < vueObj.checkedSkuList.length; i++) {
                     if (vueObj.checkedSkuList[i].skuId == skuId) {
@@ -294,7 +296,9 @@ $(function () {
     });
 
     $("#saveUploadInfo").click(function () {
-        console.info(vueObj.skuSiteAccountTitleList)
+        console.info(JSON.stringify(vueObj.skuSiteAccountTitleList));
+        console.info(JSON.stringify(vueObj.amazonUploadProductInfo));
+        console.info(JSON.stringify(vueObj.keySellPointDescForSiteList));
     });
 
     $("#fenpei").click(function () {
@@ -360,63 +364,9 @@ function reloadKindEditor(siteId) {
             items: amazonProductObj.kindEditorItems,
             id: descForSite,
             afterChange: function () {
-                for (var j = 0; j < vueObj.amazonAllSiteUploadAccountList.length; j++) {
-                    if (this.id == amazonProductObj.siteDesc.descForSite + vueObj.amazonAllSiteUploadAccountList[j].siteId) {
-                        vueObj.amazonAllSiteUploadAccountList[j].description = this.html();
-                        break;
-                    }
-                }
-            }
-        });
-
-        var specificationsForSite = amazonProductObj.siteDesc.specificationsForSite + siteId;
-        if (amazonProductObj.siteEditor[specificationsForSite]) {
-            amazonProductObj.siteEditor[specificationsForSite].remove();
-        }
-        // 规格
-        amazonProductObj.siteEditor[specificationsForSite] = K.create('#' + specificationsForSite, {
-            items: amazonProductObj.kindEditorItems,
-            id: specificationsForSite,
-            afterChange: function () {
-                for (var j = 0; j < vueObj.amazonAllSiteUploadAccountList.length; j++) {
-                    if (this.id == amazonProductObj.siteDesc.specificationsForSite + vueObj.amazonAllSiteUploadAccountList[j].siteId) {
-                        vueObj.amazonAllSiteUploadAccountList[j].specifications = this.html();
-                        break;
-                    }
-                }
-            }
-        });
-
-        // 包装
-        var packageIncludedForSite = amazonProductObj.siteDesc.packageIncludedForSite + siteId;
-        if (amazonProductObj.siteEditor[packageIncludedForSite]) {
-            amazonProductObj.siteEditor[packageIncludedForSite].remove();
-        }
-        amazonProductObj.siteEditor[packageIncludedForSite] = K.create('#' + packageIncludedForSite, {
-            items: amazonProductObj.kindEditorItems,
-            id: packageIncludedForSite,
-            afterChange: function () {
-                for (var j = 0; j < vueObj.amazonAllSiteUploadAccountList.length; j++) {
-                    if (this.id == amazonProductObj.siteDesc.packageIncludedForSite + vueObj.amazonAllSiteUploadAccountList[j].siteId) {
-                        vueObj.amazonAllSiteUploadAccountList[j].packageIncluded = this.html();
-                        break;
-                    }
-                }
-            }
-        });
-
-        // note
-        var noteForSite = amazonProductObj.siteDesc.noteForSite + siteId;
-        if (amazonProductObj.siteEditor[noteForSite]) {
-            amazonProductObj.siteEditor[noteForSite].remove();
-        }
-        amazonProductObj.siteEditor[noteForSite] = K.create('#' + noteForSite, {
-            items: amazonProductObj.kindEditorItems,
-            id: noteForSite,
-            afterChange: function () {
-                for (var j = 0; j < vueObj.amazonAllSiteUploadAccountList.length; j++) {
-                    if (this.id == amazonProductObj.siteDesc.noteForSite + vueObj.amazonAllSiteUploadAccountList[j].siteId) {
-                        vueObj.amazonAllSiteUploadAccountList[j].note = this.html();
+                for (var j = 0; j < vueObj.keySellPointDescForSiteList.length; j++) {
+                    if (this.id == amazonProductObj.siteDesc.descForSite + vueObj.keySellPointDescForSiteList[j].siteId) {
+                        vueObj.keySellPointDescForSiteList[j].description = this.html();
                         break;
                     }
                 }
@@ -719,6 +669,7 @@ function deleteCategoryWhenNoSeletetAccount(siteId) {
     }
 }
 
+// 选择账号的时候添加描述
 function addKeySellPointDesc(currentSite) {
     if (currentSite) {
         var keySellPointDescForSiteList = amazonProductObj.vueObj.keySellPointDescForSiteList;
@@ -732,10 +683,9 @@ function addKeySellPointDesc(currentSite) {
         site.skuList = [];
         var checkedSkuList = amazonProductObj.vueObj.checkedSkuList;
         for (var i =  0; i < checkedSkuList.length; i++) {
-            var sku = {skuId: checkedSkuList[i].skuId, skuName: checkedSkuList[i].skuName, sellPointList: [{sellPoint: ''},{sellPoint: ''}]};
+            var sku = {skuId: checkedSkuList[i].skuId, skuName: checkedSkuList[i].skuName, sellPointList: [{sellPoint: ''}]};
             site.skuList.push(sku);
         }
-        console.info(site)
         keySellPointDescForSiteList.push(site);
     }
 }
@@ -776,6 +726,25 @@ function deleteSkuKeySellPointDesc(skuId){
                 skuList.splice(j, 1);
                 break;
             }
+        }
+    }
+}
+
+// 选择sku的时候添加每个sku的卖点和关键词
+function addSkuKeySellPoint(currentSku) {
+    if (currentSku) {
+        var sku = {skuId: currentSku.skuId, skuName:currentSku.skuName, keywords:'', sellPointList:[{sellPoint: ''}]};
+        var keySellPointDescForSiteList = amazonProductObj.vueObj.keySellPointDescForSiteList;
+
+        for (var i = 0; i < keySellPointDescForSiteList.length; i++) {
+            var skuList = keySellPointDescForSiteList[i].skuList;
+            for (var j = 0; j < skuList.length; j++) {
+                if (skuList[j].skuId == currentSku.skuId) {
+                    return;
+                }
+            }
+
+            skuList.push(sku);
         }
     }
 }
