@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yyt.tx.mjf.entity.User;
 import com.yyt.tx.mjf.mapper.UserMapper;
 import com.yyt.tx.mjf.service.IUserService;
+import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 //    @Autowired
 //    private UserMapper userMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
 
 /*    @Override
@@ -71,6 +75,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         // save方法调用save1方法，save方法有事务，save1方法也加入了事务，抛出异常，也会回滚
         save1();
+    }
+
+    @Override
+    public void addUser(User user) {
+        int insert = userMapper.insert(user);
+        if (insert == 0) {
+            throw new ServiceException("添加用户失败");
+        }
     }
 
     private void save1() {
