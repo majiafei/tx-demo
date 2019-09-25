@@ -19,7 +19,7 @@ public class GlobalCorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:8080");
+        config.addAllowedOrigin("http://www.vue01.com");
         // 配置允许跨域的域名
 //        config.addAllowedOrigin("http://192.168.4.17:7098");
 /*        config.addAllowedOrigin("http://manage.yitao.com");
