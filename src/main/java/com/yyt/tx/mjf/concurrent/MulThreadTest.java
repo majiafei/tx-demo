@@ -1,7 +1,5 @@
 package com.yyt.tx.mjf.concurrent;
 
-import org.aspectj.weaver.ast.Var;
-
 import java.util.concurrent.*;
 
 /**
@@ -126,6 +124,8 @@ public class MulThreadTest {
         threadPoolExecutor.execute(runnable3);
 
         threadPoolExecutor.shutdown();
+
+
     }
 
 }

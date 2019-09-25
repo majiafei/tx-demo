@@ -221,4 +221,8 @@ public class TestController {
         return "vue/vue";
     }
 
+    @RequestMapping("/element_ui")
+    public String element_ui() {
+        return "element/element_ui";
+    }
 }

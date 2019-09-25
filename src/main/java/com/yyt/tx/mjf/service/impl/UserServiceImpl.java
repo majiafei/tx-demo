@@ -85,6 +85,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
     }
 
+    @Override
+    public void deleteUser(Long userId) {
+        try {
+            userMapper.delete(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void save1() {
 /*        User user = new User();
         user.setUseAge(30);

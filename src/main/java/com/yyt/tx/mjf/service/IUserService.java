@@ -26,4 +26,6 @@ public interface IUserService extends IService<User> {
 
     void addUser(User user);
 
+    void deleteUser(Long userId);
+
 }

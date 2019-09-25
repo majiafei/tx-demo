@@ -9,6 +9,7 @@ import com.yyt.tx.mjf.entity.UserList;
 import com.yyt.tx.mjf.mapper.UserMapper;
 import com.yyt.tx.mjf.service.IUserService;
 import com.yyt.tx.mjf.service.impl.UserServiceImpl;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -190,5 +191,20 @@ public class UserController {
         IPage<User> list = iUserService.list(page);
 
         return ResponseEntity.ok(list);
+    }
+
+    @RequestMapping("/delete/{userId}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteUser(@PathVariable("userId") Long userId) {
+        try {
+            iUserService.deleteUser(userId);
+
+            return ResponseEntity.ok().build();
+        } catch (ServiceException se) {
+            se.printStackTrace();
+            return ResponseEntity.status(500).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 }

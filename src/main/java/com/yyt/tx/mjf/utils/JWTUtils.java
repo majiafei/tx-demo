@@ -69,12 +69,12 @@ public class JWTUtils {
         }
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
-/*        UserInfo userInfo = new UserInfo(2, "xiaohong");
-        String token = createToken(userInfo, RSAUtils.getPrivateKey("D:/key/private_key.rsa"), 1);
-        System.out.println(token);*/
+    public static void main(String[] args) throws Exception {
+        UserInfo userInfo = new UserInfo(2, "xiaohong");
+        String token = createToken(userInfo, RSAUtils.generatePrivateKey("jsdfloeuiwrowu34279835.&ghyut"), 1);
+        System.out.println(token);
 
-        UserInfo userInfo1 = getUserInfo(RSAUtils.getPublicKey("D:/key/public_key.rsa"), "eyJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOjIsInVzZXJOYW1lIjoieGlhb2hvbmciLCJleHAiOjE1NjczNDc2MzZ9.KGi8Cun4q9cgTvdbDeDKad2cLxlcTeUjcHCFXmrp5y7MuqtlyF7C3nQqH_jQcWRvLa8tlVQrXbUvwhdy2gOYEbms-Jvkj8d4Q-tui2bw3xIE7ozyLTRkgxiQjsnBywUz5Rxo3EATieTARjzdqUVLCtyn_0e_FDeMssDaqWbsmw0");
+        UserInfo userInfo1 = getUserInfo(RSAUtils.generatePublicKey("jsdfloeuiwrowu34279835.&ghyut"), token);
         System.out.println(userInfo1.getId());
         System.out.println(userInfo1.getName());
     }
