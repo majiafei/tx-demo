@@ -221,9 +221,8 @@ public class TestController {
         return "vue/vue";
     }
 
-    @RequestMapping("/amazon")
-    public String amazon() {
-        return "amazon/amazon";
+    @RequestMapping("/element_ui")
+    public String element_ui() {
+        return "element/element_ui";
     }
-
 }
