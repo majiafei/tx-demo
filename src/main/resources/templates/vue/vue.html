@@ -67,6 +67,10 @@
             {{student.note.length}}
             <textarea :id="'note'+student.id" class="example" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"  v-model="student.note"></textarea>
         </div>
+        <div class="layui-row" v-for="student in students">
+            {{student.note.length}}
+            <textarea :id="'package'+student.id" class="example" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"  v-model="student.package"></textarea>
+        </div>
         <br />
     </form>
     <button id="subnitBtn">提交</button>
@@ -88,14 +92,15 @@
             el: '#app',
             data: {
                 students: [
-                    {name: 'zhangsan', age: 10, id:1, note: ''},
-                    {name: 'zhangsan', age: 10, id:2, note: ''}
+                    {name: 'zhangsan', age: 10, id:1, note: '', package:''},
+                    {name: 'zhangsan', age: 10, id:2, note: '', package:''}
                     ],
                 student: {
                     name: 'dd',
                     age: 0
                 },
-                htmlContent: "99999"
+                htmlContent: "99999",
+                editor:{}
             },
             methods: {
                 inputDiv() {
@@ -116,7 +121,11 @@
         vue = app;
 
         $("#subnitBtn").click(function () {
-            console.info(vue.students)
+            for (var key in vue.editor) {
+                if (vue.editor[key]) {
+                    vue.editor[key].html('0000')
+                }
+            }
         });
     });
 
@@ -146,7 +155,7 @@
 
     KindEditor.ready(function(K) {
         for (var i = 0; i < vue.students.length; i++) {
-            window.editor = K.create('#student'+vue.students[i].id, {
+            vue.editor['#student'+vue.students[i].id]  = K.create('#student'+vue.students[i].id, {
                 items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
                 id:'student'+vue.students[i].id,
                 afterChange: function () {
@@ -159,9 +168,22 @@
                 }
             });
 
-            window.editor = K.create('#note'+vue.students[i].id, {
+            vue.editor['#note'+vue.students[i].id] = K.create('#note'+vue.students[i].id, {
                 items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
                 id:'note'+vue.students[i].id,
+                afterChange: function () {
+                    for (var i = 0; i < vue.students.length; i++) {
+                        if ("note" + vue.students[i].id == this.id) {
+                            vue.students[i].note = this.html();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            vue.editor['#package'+vue.students[i].id] = window.editor = K.create('#package'+vue.students[i].id, {
+                items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
+                id:'package'+vue.students[i].id,
                 afterChange: function () {
                     for (var i = 0; i < vue.students.length; i++) {
                         if ("note" + vue.students[i].id == this.id) {

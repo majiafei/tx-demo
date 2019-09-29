@@ -221,4 +221,9 @@ public class TestController {
         return "vue/vue";
     }
 
+    @RequestMapping("/amazon")
+    public String amazon() {
+        return "amazon/amazon";
+    }
+
 }

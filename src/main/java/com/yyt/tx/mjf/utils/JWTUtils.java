@@ -34,7 +34,7 @@ public class JWTUtils {
         return  Jwts.builder()
                 .claim(JWTConstants.USER_ID, userInfo.getId())
                 .claim(JWTConstants.USER_NAME, userInfo.getName())
-                .setExpiration(DateTime.now().plusMinutes(expireMinitues).toDate())
+                //.setExpiration(DateTime.now().plusMinutes(expireMinitues).toDate())
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }
