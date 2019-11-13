@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan(basePackages = "com.yyt.tx.mjf.mapper")
 public class TxDemoApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(TxDemoApplication.class, args);
     }
