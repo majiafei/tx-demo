@@ -12,3 +12,4 @@ CREATE TABLE `shopee_review_log` (
   `update_by` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
