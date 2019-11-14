@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <script src="/layui/layui.js"></script>
+    <script src="/js/jquery.min.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell{
+            height: auto!important;
+            white-space: normal;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-row">
+    <div class="layui-col-sm12 layui-col-sm-offset2">
+        <table class="layui-hide" id="test" lay-filter="test"></table>
+    </div>
+</div>
+
+</body>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="addDiscount">
+            <i class="layui-icon">&#xe608;</i> 添加
+        </button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="switchTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="sex" value="{{d.userId}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{
+           d.userId== 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="switchTpl2">
+    <!-- 这里的 checked 的状态只是演示 -->
+    {{d.userName}}
+    <input onkeyup="changeAge(this)" type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" {{ d.userId== 1
+           ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="switchTpl3">
+    <div class="layui-row">
+        <div class="layui-col-sm12 ">
+            <form class="layui-form" method="post">
+                <div class="layui-form-item">
+                    <div class="layui-col-sm12">
+                        <div class="layui-col-sm8">
+                            <label class="layui-form-label">单行输入框</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" lay-verify="title" autocomplete="off"
+                                       placeholder="请输入标题" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-sm12">
+                        <div class="layui-col-sm2"><label class="layui-form-label">促销时间段</label></div>
+                        <div class="layui-col-sm3">
+                            <input type="text" class="layui-input" id="startTime" placeholder="yyyy-MM-dd HH:mm">
+                        </div>
+                        <div class="layui-col-sm1" style="margin-left: -6%">
+                            <label class="layui-form-label"></label>
+                        </div>
+                        <div class="layui-col-sm3">
+                            <input type="text" class="layui-input" id="endTime" placeholder="yyyy-MM-dd HH:mm">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item" style="margin-top: 10%">
+                    <div class="layui-col-sm12">
+                        <div class="layui-col-sm8 layui-col-xs-offset1">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="switchTpl4">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="margin-right: 10px;">
+        <li class="layui-nav-item layui-nav-itemed">
+            <a href="javascript:;">默认展开</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;">选项一</a></dd>
+                <dd><a href="javascript:;">选项二</a></dd>
+                <dd><a href="javascript:;">选项三</a></dd>
+                <dd><a href="">跳转项</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">解决方案</a>
+            <dl class="layui-nav-child">
+                <dd><a href="">移动模块</a></dd>
+                <dd><a href="">后台模版</a></dd>
+                <dd><a href="">电商平台</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">云市场</a></li>
+        <li class="layui-nav-item"><a href="">社区</a></li>
+    </ul>
+</script>
+
+<script type="text/html" id="userInfoTemp">
+<!--    {{d.userInfoList.length}}-->
+{{#  layui.each(d.userInfoList, function(index, item){ }}
+<li>
+    <input id="name{{index}}" name="name{{index}}" width="30px" value="{{ item.name }}"></input>
+    <input type="checkbox" value="{{item.id}}" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" {{ item.on
+           ? 'checked' : '' }}>
+</li>
+{{#  }); }}
+</script>
+
+<script type="text/html" id="imgTemp">
+    <div ><img height="50px" src="https://img10.360buyimg.com/n1/s450x450_jfs/t1/48743/24/1091/112205/5cee1c4dEb76a7c08/57cf16bf7124eb18.jpg"></div>
+
+</script>
+
+<script type="text/html" id="ageTempt">
+    {{#  layui.each(d.userInfoList, function(index, item){ }}
+    <input onkeyup="changeAge(this)" y-validate="1" validate-type = 'age' y-index="{{index}}" id="age{{index}}" type="text" style="width: 100%" value="{{item.age}}">
+    {{#  }); }}
+</script>
+
+<script>
+    var discountObj = {
+        table: undefined,
+        tableId: 'test',
+        addRow: []
+    }
+    layui.use(['table', 'laydate', 'element'], function () {
+        var table = layui.table;
+        discountObj.table = table;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+        var tableIns = table.render({
+            elem: '#test'
+            , url: '/test/list'
+            , height: 'full-200'
+            , width: 1000
+            ,addRow:[]
+            , toolbar: '#toolbarDemo'
+            , cols: [
+                [
+                    {type: 'checkbox'}
+                    , {field: 'userId', width: 80, title: 'ID', sort: true}
+                    , {field: 'userName', width: 200, title: '用户名', align: 'center', templet: '#switchTpl2'}
+                    , {field: 'userInfo', width: 200, title: '用户信息', align: 'center', templet: '#userInfoTemp', event: 'setSign'}
+                    , {field: 'age', width: 80, title: '性别', sort: true, align: 'center',  templet:'#ageTempt'},
+                    , {field: 'sex', title: '性别', width: 85, templet: '#switchTpl'}
+                    , {field: 'img', title: '性别', width: 85, templet: '#imgTemp'}
+                    , {field: 'time', title: '倒计时', width: 200, templet: function (d) {
+                        var oDate = new Date(); //获取日期对象
+                        var nowTime = oDate.getTime(); //现在的毫秒数
+                        var enddate = new Date(d.updateTimeStr);
+                        var targetTime = enddate.getTime(); // 截止时间的毫秒数
+                        var second = Math.floor((targetTime - nowTime) / 1000); //截止时间距离现在的秒数
+
+                        var day = Math.floor(second / (24 * 60 * 60)); //整数部分代表的是天；一天有24*60*60=86400秒 ；
+                        second = second % 86400; //余数代表剩下的秒数；
+                        var hour = Math.floor(second / 3600); //整数部分代表小时；
+                        second %= 3600; //余数代表 剩下的秒数；
+                        var minute = Math.floor(second / 60);
+                        second %= 60;
+                        var val = day + '天' + hour + '时' + minute + '分'+ second + '秒';
+                        return '<div class="se-second">' + val + '</div>';
+                    }}
+                    , {title: '操作', toolbar: '#barDemo', width: 150}
+                ]
+            ]
+            , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                , groups: 1 //只显示 1 个连续页码
+                // ,first: true //不显示首页
+                // ,last: true //不显示尾页
+                , limit: 10
+            },
+            done: function (res, curr, count) {
+                var data = res.data;
+                var obj = $(this);
+                $(".se-second").each(function (i, e) {
+                    var updateTimeStr = data[i].updateTimeStr;
+                    var timer = setInterval(function () {
+                        var oDate = new Date(); //获取日期对象
+                        var nowTime = oDate.getTime(); //现在的毫秒数
+                        var enddate = new Date(updateTimeStr);
+                        var targetTime = enddate.getTime(); // 截止时间的毫秒数
+                        var second = Math.floor((targetTime - nowTime) / 1000); //截止时间距离现在的秒数
+
+                        var day = Math.floor(second / (24 * 60 * 60)); //整数部分代表的是天；一天有24*60*60=86400秒 ；
+                        second = second % 86400; //余数代表剩下的秒数；
+                        var hour = Math.floor(second / 3600); //整数部分代表小时；
+                        second %= 3600; //余数代表 剩下的秒数；
+                        var minute = Math.floor(second / 60);
+                        second %= 60;
+                        if (second < 0) {
+                            $(e).html('结束')
+                            clearInterval(timer);
+                            return;
+                        }
+                        $(e).html(day + '天' + hour + '时' + minute + '分'+ second + '秒');
+                    }, 500)
+                });
+            }
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            console.info(obj);
+            console.info(checkStatus)
+            switch (obj.event) {
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    if (data.length == 0) {
+                        layer.msg("请选择需要修改的数据");
+                        return
+                    }
+                    var input = $('[y-validate]');
+                    console.info(input)
+                    input.each(function (i, e) {
+                        var y_validate_value = $(this).attr('y-validate');
+                        if (y_validate_value == '0') {
+                            $(this).css('border-color', 'red');
+                            alert('请输入有效的年龄')
+                            return;
+                        }
+                    });
+                    $.ajax({
+                        url: '/update',
+                        data: JSON.stringify(data),
+                        type: 'POST',
+                        beforeSend: function(){
+                            loadingFlag = layer.msg('正在读取数据，请稍候……', { icon: 16, shade: 0.01,shadeClose:false,time:60000 });
+                        },
+                        contentType: 'application/json',
+                        success: function (result) {
+                            console.info()
+                        }
+                    });
+                    layer.msg('选中了：' + data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                    break;
+                case 'addDiscount':
+                   /* layer.open({
+                        type: 1,
+                        area: ['600px', '500px'],
+                        content: $('#switchTpl4').html(), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                        success: function (layero, index) {
+                            //日期时间选择器
+                            laydate.render({
+                                elem: '#startTime'
+                                , type: 'datetime',
+                                format: 'yyyy-MM-dd HH:mm',
+                                min: new Date().toDateString()
+                            });
+                            //日期时间选择器
+                            laydate.render({
+                                elem: '#endTime'
+                                , type: 'datetime',
+                                format: 'yyyy-MM-dd HH:mm',
+                                min: new Date().toDateString()
+                            });
+                            //日期时间选择器
+                            laydate.render({
+                                elem: '#endTime'
+                                , type: 'datetime',
+                                format: 'yyyy-MM-dd HH:mm',
+                                min: new Date().toDateString()
+                            });
+
+                            //监听导航点击
+                            element.on('nav(demo)', function (elem) {
+                                console.log(elem)
+                                // layer.msg(elem.text());
+                            });
+                        }
+                    });*/
+                   var addRow = [{userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[{age: 10,name:'', on:false}]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]},
+                       {userName: 'xiaoming',userInfoList:[]}
+                   ];
+                   discountObj.addRow = addRow;
+                   tableIns.reload({
+                       addRow: addRow
+                   });
+                   console.info(discountObj.addRow)
+                   $.ajax({
+                       url: '/update1',
+                       type: 'post',
+                       data: {data: JSON.stringify(discountObj.addRow)},
+                       success: function (result) {
+
+                       }
+                   });
+                   //window.open('discount_add', '_blank');
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                layer.prompt({
+                    formType: 2
+                    , value: data.userName
+                }, function (value, index) {
+                    obj.update({
+                        userName: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+
+        //监听单元格编辑
+        table.on('edit(test)', function (obj) {
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+        });
+
+        //监听性别操作
+        form.on('switch(sexDemo)', function (obj) {
+            layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
+        });
+
+        //监听性别操作
+        form.on('switch(switchTest)', function (obj) {
+            var value = this.value;
+            // 获取当前控件
+            var selectIfKey=obj.othis;
+            // 获取当前所在行
+            var parentTr = selectIfKey.parents("tr");
+            // 获取当前所在行的索引
+            var parentTrIndex = parentTr.attr("data-index");
+            var currentRow = table.cache.test[parentTrIndex];
+            var  userInfoList = currentRow.userInfoList;
+           for (var i = 0;i < userInfoList.length; i++) {
+                if (userInfoList[i].id == parseInt(value) ){
+                    if (obj.elem.checked) {
+                        userInfoList[i].on = true;
+                        var  ageInput = selectIfKey.parents('td').next().find('#age' + i);
+                        console.info(ageInput.val(parseInt(ageInput.val()) + 1));
+                        break;
+                    } else {
+                        var  ageInput = selectIfKey.parents('td').next().find('#age' + i);
+                        console.info(ageInput.val(parseInt(ageInput.val()) - 1));
+                        userInfoList[i].on = false;
+                        break;
+                    }
+                }
+            }
+            currentRow['userInfoList'] = userInfoList;
+            //layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
+        });
+
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            })
+            return false;
+        });
+
+    });
+
+    function changeAge(obj) {
+        var currentIndex = $(obj).attr('y-index');
+        var nameObj = $(obj).parents('td').prev().find('#name' + $(obj).attr('y-index'));
+        var reg = /^[1-9]\d*$/;
+        if (!reg.test($(obj).val())) {
+            layer.msg('请输入正整数');
+            $(obj).css('border-color', 'red');
+            // 校验失败
+            $(obj).attr('y-validate', '0');
+            $(obj).val('');
+            return
+        }
+        var age = parseInt($(obj).val());
+        if (age < 1 || age >= 100) {
+            $(obj).val(99);
+            layer.msg('请输入小于100的整数');
+            return;
+        }
+        // 边框的颜色
+        $(obj).css('border-color', 'black');
+        nameObj.val(age * 2);
+        // 校验成功
+        $(obj).attr('y-validate', '1');
+        var tr = $(obj).parents('tr');
+        var currentRow = discountObj.table.cache.test[tr.attr('data-index')];
+        for (var i = 0; i < currentRow.userInfoList.length; i++) {
+            if (i == currentIndex) {
+                var userInfo = currentRow.userInfoList[i];
+                userInfo.name = nameObj.val();
+                userInfo.age = age;
+                break;
+            }
+        }
+    }
+    var timer;
+    function run(enddate, i) {
+        getDate(enddate, i);
+        timer = setInterval("getDate('" + enddate + "',"+ i +")", 500);
+    }
+
+    function getDate(enddate,m) {
+        var oDate = new Date(); //获取日期对象
+
+        var nowTime = oDate.getTime(); //现在的毫秒数
+        var enddate = new Date(enddate);
+        var targetTime = enddate.getTime(); // 截止时间的毫秒数
+        var second = Math.floor((targetTime - nowTime) / 1000); //截止时间距离现在的秒数
+
+        var day = Math.floor(second / 24 * 60 * 60); //整数部分代表的是天；一天有24*60*60=86400秒 ；
+        second = second % 86400; //余数代表剩下的秒数；
+        var hour = Math.floor(second / 3600); //整数部分代表小时；
+        second %= 3600; //余数代表 剩下的秒数；
+        var minute = Math.floor(second / 60);
+        second %= 60;
+        var spanH = $('.se-txt')[0];
+        var spanM = $('.se-txt')[1];
+        var spanS = $('.se-txt')[2];
+        if (second <= 0) {
+            clearInterval(timer);
+            return;
+        }
+
+        $(".se-second").each(function (i, e) {
+            if (i == m) {
+                $(this).html(second);
+            }
+        });
+
+
+/*        spanH.innerHTML = tow(hour);
+        spanM.innerHTML = tow(minute);
+        spanS.innerHTML = tow(second);*/
+    }
+
+    function tow(n) {
+        return n >= 0 && n < 10 ? '0' + n : '' + n;
+    }
+</script>
+</html>

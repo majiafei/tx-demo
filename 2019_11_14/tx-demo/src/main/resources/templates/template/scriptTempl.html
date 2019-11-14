@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <script src="/layui/layui.js"></script>
+    <script src="/js/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="layui-row">
+    <div class="layui-col-sm4">
+        <input id="clickBtn" class="layui-btn" value="点击">
+    </div>
+</div>
+
+</body>
+
+<div class="layui-row" style="display: none" id="clickDiv">
+    <div class="layui-row">
+        <div class="layui-col-sm6">
+            <input class="layui-input">
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-sm6">
+            <input class="layui-input">
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-sm4">
+            <input id="addBtn" class="layui-btn layui-col-sm-offset12" value="增加">
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="javascript_template">
+
+    <div class="layui-row layui-parent" style="margin-top: 10px">
+        <div class="layui-row">
+            <div class="layui-col-sm6">
+                <input class="layui-input">
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-sm6">
+                <input  class="layui-input">
+            </div>
+            <div class="layui-col-sm4 layui-col-sm-offset2">
+                <input class="layui-btn" value="remove" id="removeBtn">
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script type="text/javascript">
+    layui.use(['layer'], function () {
+        var layer = layui.layer;
+         $("#clickBtn").click(function () {
+             layer.open({
+                 type: 1,
+                 title: '弹出层',
+                 area: ['500px', '400px'],
+                 content: $("#clickDiv"),
+                 success: function () {
+                     $("#addBtn").click(function () {
+                         $("#clickDiv").after($("#javascript_template").html());
+                         $("#removeBtn").click(function () {
+                             $(this).parents('.layui-parent').remove();
+                         });
+                     });
+                 }
+             });
+         });
+    });
+</script>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <script src="/js/jquery.min.js"></script>
+
+    <script src="/layui/layui.js"></script>
+    <script src="/js/vue.min.js"></script>
+
+    <style>
+        p{
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 10px;
+            margin-left: 0px;
+        }
+         .remove:hover{
+            cursor: pointer;
+        }
+        i{ position:absolute; width:100px;height: 100px; font-size:0; line-height:0;left: 0;background:url(/select_image/img/sys_item_selected.gif) no-repeat right bottom;display: none}
+        .selected{
+            border:2px solid red;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-row" id="layer-photos-demo">
+    <div class="layui-col-sm1" style="position: relative">
+        <img src="/img/a1.png" style="width: 100px">
+        <span onclick="remove(this)" class="remove"  style="position: absolute; top:1px; left: 4px;background-color: white;color: red">X</span>
+    </div>
+    <div class="layui-col-sm1" style="position: relative">
+        <img src="/img/a2.png" style="width: 100px">
+        <span onclick="remove(this)" class="remove"  style="position: absolute; top:1px; left: 4px;background-color: white;color: red">X</span>
+    </div>
+    <div class="layui-col-sm1" style="position: relative">
+        <img src="/img/a3.png" style="width: 100px">
+        <span onclick="remove(this)" class="remove"  style="position: absolute; top:1px; left: 4px;background-color: white;color: green;font-weight: bolder">√</span>
+    </div>
+    <div  class="layui-col-sm1 image-div" style=";position: relative" v-for="image in images">
+        <div onclick="remove(this)">
+            <a href="javascript:;"><img onclick="remove(this)"  :src="image.url" style="width: 100px;height: 100px;"></a>
+            <i></i>
+            <span onclick="remove(this)" class="remove"  style="position: absolute; top:1px; left: 4px;background-color: white;color: red">X</span>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    var vue = new Vue({
+        el: '#layer-photos-demo',
+        data: {
+            images:[
+                {url: "/img/a1.png"},
+                {url: "/img/a2.png"},
+                {url: "/img/a3.png"},
+                {url: "/img/a4.png"}
+            ],
+           name: 'hello'
+        }
+    });
+    var layer;
+/*    layui.use('layer', function(){
+        layer = layui.layer;
+        //调用示例
+        layer.photos({
+            photos: '#layer-photos-demo'
+            ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        });
+    });*/
+
+    function remove(obj) {
+/*        if ($(obj).parent("div").find('img').hasClass('selected')) {
+            $(obj).parent("div").find('img').removeClass('selected');
+            $(obj).parent("div").find('i').css('display', 'none');
+        } else{
+            $(obj).parent("div").find('img').addClass('selected');
+            $(obj).parent("div").find('i').css('display', 'inline');
+        }*/
+/*        if ($(obj).hasClass('selected')) {
+            $(obj).removeClass('selected');
+            $(obj).parents(".image-div").find("i").css('display', 'none');
+        } else{
+            $(obj).addClass('selected');
+            $(obj).parents(".image-div").find("i").css('display', 'inline');
+        }*/
+        if( $(obj).find('img').hasClass("selected")) {
+            $(obj).find('img').removeClass('selected');
+            $(obj).find('i').css('display', 'none');
+        } else {
+                $(obj).find('img').addClass('selected');
+            $(obj).find('i').css('display', 'inline');
+        }
+        // $(obj).find('i').css('display', 'inline');
+  }
+</script>
+</html>

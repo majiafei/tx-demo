@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <script src="/layui/layui.js"></script>
+
+</head>
+<body>
+
+    <div class="layui-fluid">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>流体容器（宽度自适应，不固定）</legend>
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-sm3">
+                <div class="grid-demo grid-demo-bg1">25%</div>
+            </div>
+            <div class="layui-col-sm3">
+                <div class="grid-demo">25%</div>
+            </div>
+            <div class="layui-col-sm3">
+                <div class="grid-demo grid-demo-bg1">25%</div>
+            </div>
+            <div class="layui-col-sm3">
+                <div class="grid-demo">25%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+<!--            <div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
+                <div class="layui-card">
+                    <div class="layui-card-body mini-bar">
+                        <div class="ztree" id="deptTree"></div>
+                    </div>
+                </div>
+            </div>-->
+            <div class="layui-col-sm12 layui-col-md9 layui-col-lg10">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form toolbar">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <div class="layui-col-sm4">
+                                        <button class="layui-btn">默认按钮</button>
+                                    </div>
+                                    <div class="layui-col-sm8">
+                                        <input id="name" class="layui-input" type="text" placeholder="账号/姓名/手机号"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <div class="layui-col-sm4">
+                                        <button class="layui-btn">注册时间</button>
+                                    </div>
+                                    <div class="layui-col-sm8">
+                                        <input id="timeLimit" class="layui-input" type="text" placeholder="注册时间"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                    <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <fieldset class="layui-elem-field " style="margin-top: 30px;">
+        <legend>按钮主题</legend>
+        <div>
+            <button class="layui-btn layui-btn-primary">原始按钮</button>
+            <button class="layui-btn">默认按钮</button>
+            <button class="layui-btn layui-btn-normal">百搭按钮</button>
+            <button class="layui-btn layui-btn-warm">暖色按钮</button>
+            <button class="layui-btn layui-btn-danger">警告按钮</button>
+            <button class="layui-btn layui-btn-disabled">禁用按钮</button>
+        </div>
+    </fieldset>
+
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <!--            <div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
+                            <div class="layui-card">
+                                <div class="layui-card-body mini-bar">
+                                    <div class="ztree" id="deptTree"></div>
+                                </div>
+                            </div>
+                        </div>-->
+            <div class="layui-col-sm12 layui-col-md9 layui-col-lg10">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form toolbar">
+                            <div class="layui-form-item">
+                                <div class="layui-row">
+                                    <div class="layui-card">
+                                        <div class="layui-card-body">
+                                            <div class="layui-inline">
+                                                <div class="layui-col-sm4">
+                                                    <button class="layui-btn">默认按钮</button>
+                                                </div>
+                                                <div class="layui-col-sm8">
+                                                    <input id="" class="layui-input" type="text" placeholder="注册时间"/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <div class="layui-col-sm4">
+                                                    <button class="layui-btn">注册时间</button>
+                                                </div>
+                                                <div class="layui-col-sm8">
+                                                    <input id="timeLimit1" class="layui-input" type="text" placeholder="注册时间"/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <button id="btnSearch1" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                                <button id="btnExp1" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-row">
+                                    <div class="layui-card">
+                                        <div class="layui-card-body">
+                                            <div class="layui-inline">
+                                                <div class="layui-col-sm4">
+                                                    <button class="layui-btn">默认按钮</button>
+                                                </div>
+                                                <div class="layui-col-sm8">
+                                                    <input id="" class="layui-input" type="text" placeholder="注册时间"/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <div class="layui-col-sm4">
+                                                    <button class="layui-btn">注册时间</button>
+                                                </div>
+                                                <div class="layui-col-sm8">
+                                                    <select id="logType" class="layui-select">
+                                                        <option value="">类型</option>
+                                                        <option value="0">全部</option>
+                                                        <option value="1">业务日志</option>
+                                                        <option value="2">异常日志</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <button id="" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                                <button id="" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form toolbar">
+                            <div class="layui-inline">
+                                <select id="44">
+                                    <option value="">类型</option>
+                                    <option value="0">全部</option>
+                                    <option value="1">业务日志</option>
+                                    <option value="2">异常日志</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form toolbar">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <input id="beginTime" class="layui-input" type="text" placeholder="开始时间"/>
+                                </div>
+                                <div class="layui-inline">
+                                    <input id="endTime" class="layui-input" type="text" placeholder="结束时间"/>
+                                </div>
+                                <div class="layui-inline">
+                                    <input id="logName" class="layui-input" type="text" placeholder="日志名称"/>
+                                </div>
+                                <div class="layui-inline">
+                                    <select id="dd">
+                                        <option value="">类型</option>
+                                        <option value="0">全部</option>
+                                        <option value="1">业务日志</option>
+                                        <option value="2">异常日志</option>
+                                    </select>
+                                </div>
+                                <div class="layui-inline">
+                                </div>
+                            </div>
+                        </div>
+                        <table class="layui-table" id="logTable" lay-filter="logTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+
+
+
+
+
+    });
+</script>
+</html>
