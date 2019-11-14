@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery下拉菜单插件</title>
+<link href="/searchselect/4/css/UCFORM.css" rel="stylesheet" type="text/css">
+<script>var beforeload = (new Date()).getTime();</script>
+<script type="text/javascript" src="/searchselect/4/js/jquery.min.js"></script>
+<script type="text/javascript" src="/searchselect/4/js/jQuery.UCSelect.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	for(var i=0; i<1000; i++){
+		$('select[name=1]').append('<option value="UC'+i+'">'+i+'</option>')
+	}
+	$('select[name=1]').UCFormSelect();
+	/*$('select[name=2]').UCFormSelect();
+	$('select[name=3]').UCFormSelect();
+	$('select[name=4]').UCFormSelect();
+	$('.set').click(function(){
+	$('select[name=1]').val(($('select[name=1]').find('option').eq($('select[name=1]')[0].selectedIndex+1).val())).trigger("change");
+})
+$('.mtp').click(function(){
+	if($('select[name=1]').attr('multiple')){
+		$(this).text('设为多选')
+		$('select[name=1]').attr('multiple',false).UCFormSelect()
+	} else {
+		$(this).text('设为单选')
+		$('select[name=1]').attr('multiple',true).UCFormSelect()
+	}
+})
+$('.mtpset').click(function(){$('select[name=1]').val(['UC40','UC80','UC10','UC65']).trigger("change")})
+$('.get').click(function(){
+	var val=''
+	$('select[name=1]').find("option:selected").each(function(){
+		val+=val==''?$(this).text():', '+$(this).text()
+	});
+	alert(val)
+})
+$('.on').click(function(){$('select[name=1]').UCFormSelect()})
+$('.off').click(function(){$('select[name=1]').UCFormSelect('destroy')})
+$('.en').click(function(){$('select[name=1]').UCFormSelect('enable')})
+$('.di').click(function(){$('select[name=1]').UCFormSelect('disabled')})
+$('.op').click(function(){$('select[name=1]').UCFormSelect('open')})
+$('.cl').click(function(){$('select[name=1]').UCFormSelect('close')})
+	function getPageLoadTime(){
+
+        var afterload = (new Date()).getTime();
+
+        seconds = (afterload-beforeload) / 1000;
+
+        $('#runtime').text('页面加载用时:  ' + seconds + ' sec(s).');
+
+}
+
+window.onload = getPageLoadTime;*/
+});
+</script>
+<style>
+	body { padding:0; margin:0px; text-align:center; }
+	.UCSelect,select { width:500px; margin:0 auto; }
+</style>
+</head>
+
+<body>
+<center>
+<h1>运行所耗时间</h1>
+<div id='runtime'></div>
+<br>
+
+<br>
+<br>
+
+<h1>1</h1>
+<select name="1" tabindex="1" size="20">
+</select><br><br>
+<!--&lt;!&ndash;<button class="on" tabindex="20">加载插件</button>
+<button class="off" tabindex="20">销毁插件</button>
+<button class="mtp" tabindex="20">设为多选</button>
+<button class="set" tabindex="20">单选赋值</button>
+<button class="mtpset" tabindex="20">多选赋值</button>
+<button class="get" tabindex="20">取值测试</button>
+<button class="en" tabindex="20">设为可用</button>
+<button class="di" tabindex="20">设为禁用</button>
+<button class="op" tabindex="20">展开选项</button>
+<button class="cl" tabindex="20">折叠选项</button>
+
+<br>
+<br>
+<br><br>
+<br>
+<br>
+<br>
+<br><br>
+<br>
+<h1>2</h1>
+<select class="select" name="2" tabindex="2" multiple>
+	<optgroup label="测试分组" disabled>
+	<option value="UC1">1</option>
+	<option value="UC2">2</option>
+	<option value="UC3">3</option>
+	</optgroup>
+	<option value="UC4">4</option>
+	<option value="UC5">5</option>
+	<option value="UC6">6</option>
+	<option value="UC7">7</option>
+	<option value="UC8">8</option>
+	<option value="UC9">9</option>
+	<option value="UC10">10</option>
+	<optgroup label="测试分组" disabled>
+		<option value="UC11">11</option>
+		<option value="UC12" selected>12</option>
+		<option value="UC13">13</option>
+		<option value="UC14">14</option>
+		<option value="UC15">15</option>
+	</optgroup>
+	<option value="UC16">16</option>
+	<optgroup label="测试分组2">
+		<option value="UC11">11</option>
+		<option value="UC12">12</option>
+		<option value="UC13">13</option>
+		<option value="UC14">14</option>
+		<option value="UC15">15</option>
+	</optgroup>
+	<option value="UC17">17</option>
+	<option value="UC18">18</option>
+	<option value="UC19">19</option>
+	<option value="UC20">20</option>
+	<option value="UC21">21</option>
+	<option value="UC22">22</option>
+	<option value="UC23">23</option>
+	<option value="UC24">24</option>
+	<option value="UC25">25</option>
+	<option value="UC26">26</option>
+	<option value="UC27" disabled>27</option>
+	<option value="UC28" disabled>28</option>
+	<option value="UC29" disabled>29</option>
+</select><br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<h1>3</h1>
+<select name="3" tabindex="3" style="display:none;">
+	<option value="UC1">1</option>
+	<option value="UC2">2</option>
+	<option value="UC3">3</option>
+	<option value="UC4">4</option>
+	<option value="UC5">5</option>
+</select><br>
+<br>
+<br>
+<br>
+<br>
+<h1>4</h1>
+<select name="4" tabindex="4">
+	<optgroup label="测试分组" disabled>
+	<option value="UC1">1</option>
+	<option value="UC2">2</option>
+	<option value="UC3">3</option>
+	</optgroup>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC1">1</option>
+	<option value="UC2" disabled>2</option>
+	<optgroup label="测试分组">
+	<option value="UC3">3</option>
+	<option value="UC4">4</option>
+	</optgroup>
+	<option value="UC5">5</option>
+</select>-->
+</center>-->
+</body>
+</html>

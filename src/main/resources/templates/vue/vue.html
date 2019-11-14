@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="/js/vue.min.js"></script>
+
+    <link rel="stylesheet" href="/kindeditor/themes/default/default.css" />
+    <link rel="stylesheet" href="/kindeditor/plugins/code/prettify.css" />
+
+
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
     <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+
+    <script src="/js/vue.min.js"></script>
+
+    <script charset="utf-8" src="/kindeditor/kindeditor-all.js"></script>
+    <script charset="utf-8" src="/kindeditor/lang/zh-CN.js"></script>
+    <script charset="utf-8" src="/kindeditor/plugins/code/prettify.js"></script>
+
     <style>
         td{
             text-align: center;
@@ -12,7 +27,31 @@
     </style>
 </head>
 <body>
-<div id="app">
+<div id="app" class="layui-form">
+    <div class="layui-col-md4">
+        <label class="layui-form-label">移交单位<span style="color:red">*</span></label>
+        <div class="layui-input-block">
+            <input type="text" name="HandoverCompany" id="HandoverCompany" class="layui-input" style="position:absolute;z-index:2;width:80%;" lay-verify="required"  onkeyup="search()" autocomplete="off">
+            <select type="text" id="hc_select" lay-filter="hc_select" autocomplete="off" placeholder="移交单位全称" lay-verify="required" class="layui-select" lay-search>
+                <option value="111" >111</option>
+                <option value="222" selected>222</option>
+                <option value="333">333</option>
+                <option value="444">444</option>
+                <option value="555">555</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-col-sm2">
+        <select rch-input id="select1">
+            <option>sdf1</option>
+            <option>sdf2</option>
+            <option>sdf3</option>
+            <option>sdf4</option>
+        </select>
+        <button id="hello">hello</button>
+    </div>
+
     <table>
         <tr>
             <td ><input placeholder="请输入姓名" id="name" v-model="student.name"></td>
@@ -20,51 +59,238 @@
             <td><input value="添加" @click="add" type="button"></td>
         </tr>
     </table>
-    <table >
+    <table class="layui-table">
         <tr>
             <th>序号</th>
             <th>姓名</th>
             <th>年龄</th>
+            <td><input type="checkbox" lay-skin="primary"></td>
+            <td><input id="all" lay-filter="all" type="checkbox" lay-skin="primary"></td>
         </tr>
         <tr v-for="(student,index) in students">
             <td>{{index}}</td>
             <td>{{student.name}}</td>
             <td>{{student.age}}</td>
             <td><input type="button" value="删除" @click="del(index)"></td>
+            <td><input type="checkbox" lay-skin="primary"></td>
         </tr>
     </table>
+
+<!--    <span>{{htmlContent.length}}</span>
+    <div id="content" class="col-sm-offset-2" contenteditable="true" @keyup="inputDiv" @input="htmlContent=$event.target.innerHTML" style="width: 300px;height: 300px" v-html="htmlContent">
+
+    </div>-->
+
+    <form name="example" method="post" action="/sumitEditor">
+        <div class="layui-row" v-for="student in students">
+            {{student.name.length}}
+            <textarea :id="'student'+student.id" class="example" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"  v-model="student.name"></textarea>
+        </div>
+
+        <div class="layui-row" v-for="student in students">
+            {{student.note.length}}
+            <textarea :id="'note'+student.id" class="example" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"  v-model="student.note"></textarea>
+        </div>
+        <br />
+    </form>
+
+    <textarea id="aa"  name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"  ></textarea>
+    <button id="aabtn">aa</button>
+
+    <button id="subnitBtn">提交</button>
 </div>
 </body>
 
 <script>
+    var vue;
+    var form1 = undefined;
     $(function () {
+
+        layui.use('form', function(){
+            var form = layui.form;
+            form1 = layui.form;
+            form.on('checkbox(all)', function () {
+
+            });
+
+            form.on('select(hc_select)', function (data) {   //选择移交单位 赋值给input框
+                $("#HandoverCompany").val(data.value);
+                $("#hc_select").next().find("dl").css({ "display": "none" });
+                form.render();
+            });
+
+            $(".layui-select-title").find('input').removeAttr('readonly');
+        });
         var app = new Vue({
             el: '#app',
             data: {
                 students: [
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10},
-                    {name: 'zhangsan', age: 10}
+                    {name: 'zhangsan', age: 10, id:1, note: ''},
+                    {name: 'zhangsan', age: 10, id:2, note: ''}
                     ],
                 student: {
                     name: 'dd',
                     age: 0
-                }
+                },
+                htmlContent: "99999"
             },
             methods: {
+                inputDiv() {
+                    set_focus()
+                  console.info(this.htmlContent)
+                },
                 del: function (index) {
                     this.students.splice(index, 1);
                 },
                 add: function () {
                     this.students.push(this.student);
+                    this.$nextTick(function () {
+                        form1.render()
+                    });
                 }
             }
         })
+        vue = app;
+
+        $("#subnitBtn").click(function () {
+            console.info(vue.students)
+        });
+
+        $("#aabtn").click(function () {
+            console.info($("#aa"))
+            KindEditor.ready(function(K) {
+                window.editor = K.create('#aa', {
+                    items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
+                });
+            });
+        });
+
+        $("#hello").click(function () {
+            console.info($("#select1").siblings('.layui-form-select').find('input').val());
+        });
     });
+
+    function set_focus()
+    {
+        alert()
+        el=document.getElementById('content');
+        //el=el[0];  //jquery 对象转dom对象
+        el.focus();
+        if($.support.msie)
+        {
+            var range = document.selection.createRange();
+            this.last = range;
+            range.moveToElementText(el);
+            range.select();
+            document.selection.empty(); //取消选中
+        }
+        else
+        {
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }}
+
+    KindEditor.ready(function(K) {
+        for (var i = 0; i < vue.students.length; i++) {
+            window.editor = K.create('#student'+vue.students[i].id, {
+                items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
+                id:'student'+vue.students[i].id,
+                afterChange: function () {
+                   for (var i = 0; i < vue.students.length; i++) {
+                       if ("student" + vue.students[i].id == this.id) {
+                           vue.students[i].name = this.html();
+                           break;
+                       }
+                   }
+                }
+            });
+
+            window.editor = K.create('#note'+vue.students[i].id, {
+                items: ['justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic','clearhtml'],
+                id:'note'+vue.students[i].id,
+                afterChange: function () {
+                    for (var i = 0; i < vue.students.length; i++) {
+                        if ("note" + vue.students[i].id == this.id) {
+                            vue.students[i].note = this.html();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+     function search() {
+        var value = $("#HandoverCompany").val();
+        $("#hc_select").val(value);
+         form1.render();
+        $("#hc_select").next().find("dl").css({ "display": "block" });
+        var dl = $("#hc_select").next().find("dl").children();
+        var j = -1;
+        for (var i = 0; i < dl.length; i++) {
+            if (dl[i].innerHTML.indexOf(value) <= -1) {
+                dl[i].style.display = "none";
+                j++;
+            }
+            if (j == dl.length-1) {
+                $("#hc_select").next().find("dl").css({ "display": "none" });
+            }
+        }
+
+    }
+
+    window.onload=function () {
+        var selects = $("select");
+        selects.each(function (i, e) {
+            var rch_input = $(e).attr('rch-input');
+            if (rch_input == '') {
+                $(e).siblings('.layui-form-select').find('input').keyup(function () {
+                    var value = $(this).val();
+                    var layuiSelect = $(this).parents('.layui-form-select');
+                    var ddList = $(layuiSelect).find('.layui-anim').find('dd');
+                    if (value == '') {
+                        for (var i = 0; i < ddList.length; i++) {
+                            var dd = ddList[i];
+                            if ($(dd).attr('dd-new-add') == '') {
+                                $(dd).remove();
+                            } else {
+                                $(dd).css('display', 'block');
+                            }
+
+                        }
+                    } else {
+                        if (ddList) {
+                            var isFind = false;
+                            for (var i = 0; i < ddList.length; i++) {
+                                var dd = ddList[i];
+                                if ($(dd).attr('dd-new-add') == '') {
+                                    $(dd).remove();
+                                    break;
+                                }
+                                var layValue = $(dd).text();
+                                if (layValue.indexOf(value) != -1) {
+                                    isFind = true;
+                                    $(dd).css('display', 'block');
+                                    break;
+                                } else {
+                                    $(dd).css('display', 'none');
+                                    //$(dd).('layui-this');
+                                }
+                            }
+                            if (!isFind) {
+                                $(layuiSelect).find('.layui-anim').append('<dd dd-new-add lay-value="'+ value +'" class="" style="display: block;">'+ value +'</dd>');
+                            }
+                        }
+                    }
+
+                });
+            }
+        });
+    }
 </script>
 
 </html>

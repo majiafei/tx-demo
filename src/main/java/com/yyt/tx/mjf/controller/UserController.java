@@ -7,8 +7,12 @@ import com.yyt.tx.mjf.common.pojo.EasyUITree;
 import com.yyt.tx.mjf.entity.User;
 import com.yyt.tx.mjf.entity.UserList;
 import com.yyt.tx.mjf.mapper.UserMapper;
+import com.yyt.tx.mjf.service.IUserService;
 import com.yyt.tx.mjf.service.impl.UserServiceImpl;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +35,9 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private IUserService iUserService;
 
     @Autowired
     private UserMapper userMapper;
@@ -161,5 +168,43 @@ public class UserController {
         resultMap.put("data", countList);
 
         return resultMap;
+    }
+
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity addUser(@RequestBody User user) {
+        try {
+            userService.addUser(user);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @RequestMapping("/list2")
+    @ResponseBody
+    public ResponseEntity<IPage<User>> list2(@RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size) {
+        Page page = new Page(current, size);
+        // 暂时先不分页
+        IPage<User> list = iUserService.list(page);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @RequestMapping("/delete/{userId}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteUser(@PathVariable("userId") Long userId) {
+        try {
+            iUserService.deleteUser(userId);
+
+            return ResponseEntity.ok().build();
+        } catch (ServiceException se) {
+            se.printStackTrace();
+            return ResponseEntity.status(500).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 }

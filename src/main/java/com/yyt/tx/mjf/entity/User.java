@@ -3,10 +3,13 @@ package com.yyt.tx.mjf.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.management.remote.JMXPrincipal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName: User
@@ -31,4 +34,27 @@ public class User {
     @TableField("create_time")
     private Date createTime;
 
+    @TableField(exist = false)
+    private Date updateTime;
+
+    @TableField(exist = false)
+    private String createTimeStr;
+
+    @TableField(exist = false)
+    private String updateTimeStr;
+
+    @TableField(exist = false)
+    private List<UserInfo> userInfoList;
+
+    @JsonProperty("layDisabled")
+    @TableField(exist = false)
+    private Boolean layDisabled;
+
+    public Boolean getLAY_DISABLED() {
+        return layDisabled;
+    }
+
+    public void setLAY_DISABLED(Boolean LAY_DISABLED) {
+        this.layDisabled = LAY_DISABLED;
+    }
 }

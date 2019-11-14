@@ -343,7 +343,7 @@ public class GenerateUtils {
         System.out.println(tableNames);
 
         for (String tableName : tableNames) {
-            if (tableName.equals("lazada_global_site_price")) {
+            if (tableName.equals("shopee_review_log")) {
                 getColumnComments(tableName);
                 StringBuilder sb = new StringBuilder();
                 String entityName = firstLetterConverUppercase(underlineToHump(tableName));
